@@ -6,3 +6,39 @@ Medium green: #55c57a
 Dark green: #28b485
 
 */
+
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body
+{
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1/7;
+    color: #777;
+    padding: 30px;
+}
+
+.header 
+{
+    height: 95vh;
+
+    /* Both gradient colors use 80% opacity:
+       rgba() expresses it as 0.8, while 8-digit hex uses CC as the alpha value. */
+    background-image: linear-gradient(
+        to right bottom,
+        rgba(126, 213, 111, 0.8 ),
+        #28b485cc),
+    url(../img/hero.jpg);        
+    background-size: cover; /* Scales the background image to cover the entire element, cropping if necessary. */
+    background-position: top; 
+
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); /* Clips the header into a polygon, creating the diagonal bottom edge. */
+}
+
+
