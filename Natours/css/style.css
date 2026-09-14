@@ -17,7 +17,7 @@ body{
     font-family: "Lato", sans-serif;
     font-weight: 400;
     font-size: 16px;
-    line-height: 1/7;
+    line-height: 1.7;
     color: #777;
     padding: 30px;
 }
@@ -68,6 +68,9 @@ body{
 
     /* Converts the displayed text to uppercase without changing the HTML text itself. */
     text-transform: uppercase;
+
+    /* used to fix stuttering text during end of animation*/
+    backface-visibility: hidden;
 }
 
 .heading-primary-main{
@@ -79,6 +82,23 @@ body{
     font-size: 60px;
     font-weight:  400;
     letter-spacing: 35px;
+
+    /* Applies the moveInLeft @keyframes animation to this element. */
+    animation-name: moveInLeft;
+
+    /* The animation takes 1 second to complete from 0% to 100%. */
+    animation-duration: 1s;
+
+    /* Starts relatively quickly and slows down as it reaches the end. */
+    animation-timing-function: ease-out;
+
+
+    /* 
+    Runs the animation multiple times instead of only once.
+    animation-iteration-count: 3;
+
+    Waits 3 seconds before starting the animation.
+    animation-delay: 3s;*/
 }
 
 .heading-primary-sub{
@@ -87,5 +107,62 @@ body{
     font-size: 20px;
     font-weight: 700;
     letter-spacing: 17.4px;
+    
+    /* Shorthand for:
+       animation-name: moveInRight;
+       animation-duration: 1s;
+       animation-timing-function: ease-out;
+    */
+    animation: moveInRight 1s ease-out;
 }
 
+
+/* Moves the element in from the left, slightly overshoots, then settles into place. */
+@keyframes  moveInLeft {
+    
+    /* Animation starting point: invisible and shifted 100px to the left. */
+    0%
+    {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    
+    /* Near the end, move slightly past the final position to create an overshoot effect. */
+    80%
+    {
+        transform: translateX(10px);
+    }
+
+    /* Finish fully visible and back at the element's original position. */
+    100%
+    {
+        opacity: 1;
+        transform: translate(0);
+    }
+
+}
+
+/* Moves the element in from the right, slightly overshoots, then settles into place. */
+@keyframes  moveInRight {
+    
+    /* Animation starting point: invisible and shifted 100px to the right. */
+    0%
+    {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    
+    /* Near the end, move slightly past the final position to create an overshoot effect. */
+    80%
+    {
+        transform: translateX(-10px);
+    }
+
+    /* Finish fully visible and back at the element's original position. */
+    100%
+    {
+        opacity: 1;
+        transform: translate(0);
+    }
+
+}

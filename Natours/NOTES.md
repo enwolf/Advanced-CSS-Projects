@@ -174,3 +174,119 @@ A useful mental model is:
 - `<span>` elements are inline by default, so without `display: block` the two spans would normally continue on the same line when space allows.
 - Setting each span to `display: block` makes each one take its own line.
 - This lets `"Outdoors"` and `"is where life happens"` remain part of the same `<h1>` while being laid out and styled separately.
+
+### CSS Animations with `@keyframes`
+
+CSS animations are created in two parts:
+
+1. Define what the animation does using `@keyframes`.
+2. Apply that animation to an element using the `animation` properties.
+
+#### Defining the Animation
+
+```css
+@keyframes moveInLeft {
+    
+    0%
+    {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    
+    80%
+    {
+        transform: translateX(10px);
+    }
+
+    100%
+    {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+```
+
+- `@keyframes` defines the stages of an animation.
+- `moveInLeft` is the name given to the animation so it can be applied to an element later.
+- The percentages represent points in the animation timeline:
+  - `0%` is the starting state.
+  - `80%` is a state near the end.
+  - `100%` is the final state.
+- `translateX()` moves an element horizontally without changing the surrounding document layout.
+- A negative `translateX()` value moves the element left, while a positive value moves it right.
+- At `0%`, the element starts invisible with `opacity: 0` and is shifted `100px` to the left using `translateX(-100px)`.
+- At `80%`, the element moves `10px` past its final position using `translateX(10px)`. This creates a small overshoot effect rather than having the element stop immediately.
+- At `100%`, the element becomes fully visible and returns to its original position with `translate(0)`.
+
+The `moveInRight` animation uses the same idea in the opposite direction:
+
+```css
+@keyframes moveInRight {
+    
+    0%
+    {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    
+    80%
+    {
+        transform: translateX(-10px);
+    }
+
+    100%
+    {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+```
+
+It begins `100px` to the right, slightly overshoots to the left, and then settles back into its original position.
+
+#### Applying an Animation
+
+The main heading applies the animation using separate animation properties:
+
+```css
+animation-name: moveInLeft;
+animation-duration: 1s;
+animation-timing-function: ease-out;
+```
+
+- `animation-name` selects which `@keyframes` animation should run.
+- `animation-duration` controls how long it takes to move from `0%` to `100%`.
+- `animation-timing-function` controls how the animation's speed changes while it runs.
+- `ease-out` starts the animation relatively quickly and slows it down toward the end.
+
+Other optional animation properties include:
+
+```css
+animation-iteration-count: 3;
+animation-delay: 3s;
+```
+
+- `animation-iteration-count` controls how many times the animation runs.
+- `animation-delay` waits before starting the animation.
+
+#### Animation Shorthand
+
+The same animation settings can also be written using the `animation` shorthand property:
+
+```css
+animation: moveInRight 1s ease-out;
+```
+
+This combines:
+
+```css
+animation-name: moveInRight;
+animation-duration: 1s;
+animation-timing-function: ease-out;
+```
+
+The basic shorthand used here follows:
+
+`animation: name duration timing-function;`
+
+So the animation is defined once with `@keyframes`, then individual elements choose which animation to use and how it should run.
