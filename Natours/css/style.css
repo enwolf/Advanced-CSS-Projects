@@ -7,15 +7,13 @@ Dark green: #28b485
 
 */
 
-*
-{
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body
-{
+body{
     font-family: "Lato", sans-serif;
     font-weight: 400;
     font-size: 16px;
@@ -24,8 +22,7 @@ body
     padding: 30px;
 }
 
-.header 
-{
+.header{
     height: 95vh;
 
     /* Both gradient colors use 80% opacity:
@@ -37,8 +34,58 @@ body
     url(../img/hero.jpg);        
     background-size: cover; /* Scales the background image to cover the entire element, cropping if necessary. */
     background-position: top; 
+    position: relative;
 
     clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); /* Clips the header into a polygon, creating the diagonal bottom edge. */
 }
 
+.logo-box{
+    /* Position the logo relative to the nearest positioned ancestor. */
+    position: absolute;
+    top: 40px;
+    left: 40px;
+}
+
+.logo{
+    /* Setting only the height lets the width scale automatically to preserve the image's aspect ratio. */
+    height: 35px;
+}
+
+.text-box{
+    /*
+     * Move the element's top-left corner to the center of its positioned ancestor.
+     * translate() then shifts it back by 50% of its own width and height,
+     * which centers the element itself rather than its top-left corner.
+     */
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.heading-primary{
+    color: #fff;
+
+    /* Converts the displayed text to uppercase without changing the HTML text itself. */
+    text-transform: uppercase;
+}
+
+.heading-primary-main{
+    /*
+     * These are span elements by default. display: block makes each span
+     * take its own line instead of remaining inline with the other text.
+     */
+    display: block;
+    font-size: 60px;
+    font-weight:  400;
+    letter-spacing: 35px;
+}
+
+.heading-primary-sub{
+    /* Keeps the subtitle on its own line beneath the main heading. */
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 17.4px;
+}
 

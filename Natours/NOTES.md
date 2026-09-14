@@ -127,3 +127,50 @@ Because the header itself is `95vh` tall, the point at `75vh` is above the botto
 
 That last distinction is important: clip-path isn't resizing the header or cutting the actual element apart. It is defining a visible mask over it.
 
+#### Header Text Structure
+
+```html
+<div class="text-box">
+    <h1 class="heading-primary">
+        <span class="heading-primary-main">Outdoors</span>
+        <span class="heading-primary-sub">is where life happens</span>
+    </h1>
+</div>
+```
+
+- `.text-box` wraps the entire heading, so positioning `.text-box` moves the main heading and subheading together as one unit.
+- `<h1>` provides the semantic main heading for the page.
+- The two `<span>` elements allow the two pieces of the heading to be styled independently while still belonging to the same `<h1>`.
+
+#### Centering the Text Box
+
+```css
+.text-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+```
+
+- `top: 50%` and `left: 50%` move the **top-left corner** of `.text-box` to the center of its containing element.
+- At this point the box itself is not centered — only its top-left corner is.
+- `transform: translate(-50%, -50%)` then moves `.text-box` left by `50%` of **its own width** and up by `50%` of **its own height**.
+- Because `.text-box` contains the entire `<h1>`, this centers the whole heading group together.
+
+A useful mental model is:
+
+**Move the element's corner to the center, then pull the element back by half of its own size.**
+
+#### Main and Subheading Layout
+
+```css
+.heading-primary-main,
+.heading-primary-sub {
+    display: block;
+}
+```
+
+- `<span>` elements are inline by default, so without `display: block` the two spans would normally continue on the same line when space allows.
+- Setting each span to `display: block` makes each one take its own line.
+- This lets `"Outdoors"` and `"is where life happens"` remain part of the same `<h1>` while being laid out and styled separately.
