@@ -290,3 +290,176 @@ The basic shorthand used here follows:
 `animation: name duration timing-function;`
 
 So the animation is defined once with `@keyframes`, then individual elements choose which animation to use and how it should run.
+
+### Multiple Classes and Spaces in Selectors
+
+#### Multiple Classes in HTML
+
+The `class` attribute can contain multiple class names separated by spaces:
+
+```html
+<a href="#" class="btn btn-white">
+```
+
+This element has two separate classes:
+
+- `btn`
+- `btn-white`
+
+The space inside `class=""` separates the class names.
+
+For example:
+
+```html
+class="btn btn-white animated"
+```
+
+means the element has all three classes:
+
+- `btn`
+- `btn-white`
+- `animated`
+
+Each class can provide its own styles to the same element. For example, `btn` can provide the shared button styles while `btn-white` provides the white button styles.
+
+#### Spaces in CSS Class Selectors
+
+There is one related CSS syntax trap:
+
+```css
+.btn.btn-white
+```
+
+means **an element that has both classes**, while:
+
+```css
+.btn .btn-white
+```
+
+means **a `.btn-white` element somewhere inside a `.btn` element**.
+
+So:
+
+```css
+.btn.btn-white   /* One element with both classes */
+.btn .btn-white  /* A btn-white element inside a btn element */
+```
+
+Whitespace is doing different jobs depending on where it appears:
+
+- Inside an HTML `class=""` attribute, spaces separate class names applied to the same element.
+- Between CSS selectors, a space can represent a descendant relationship between elements.
+
+### Centering an Inline-Block Button with `text-align`
+
+The button is an `<a>` element:
+
+```html
+<a href="#" class="btn btn-white">Discover our tours</a>
+```
+
+By default, an anchor is an inline element. For this button, however, we want two things at the same time:
+
+1. We want it to behave more like its own box so padding and other box-related styles work naturally.
+2. We still want it to behave as inline-level content so the parent `.text-box` can center the entire button with `text-align: center`.
+
+This is why the button uses:
+
+```css
+.btn:link,
+.btn:visited {
+    display: inline-block;
+}
+```
+
+`inline-block` combines useful behavior from both inline and block elements.
+
+A useful mental model is:
+
+> **Inline for layout, block-like for sizing and box behavior.**
+
+Compared with the other display types:
+
+- `inline` stays within the text flow, but has more limited box-like behavior.
+- `block` behaves as its own block and normally takes up the available width.
+- `inline-block` stays inline in the surrounding layout, but can still behave like a distinct box with padding, dimensions, transforms, and similar styling.
+
+The parent `.text-box` contains both the heading and the button:
+
+```html
+<div class="text-box">
+    <h1 class="heading-primary">
+        ...
+    </h1>
+
+    <a href="#" class="btn btn-white">Discover our tours</a>
+</div>
+```
+
+The parent then uses:
+
+```css
+.text-box {
+    text-align: center;
+}
+```
+
+It is easy to think that `text-align: center` only centers actual text, but it also controls the horizontal alignment of inline-level content inside the element.
+
+Because the button is `display: inline-block`, the **entire button box** still counts as inline-level content. This allows `.text-box` to center the whole button horizontally with `text-align: center`.
+
+The text inside the button is **not what moves the button into the center**. The parent is centering the inline-block button itself.
+
+There are therefore two related effects:
+
+1. `.text-box` uses `text-align: center` to center the inline-block button inside the container.
+2. `text-align` is inherited, so the text inside the button is also centered within the button.
+
+If the anchor were changed to a normal block element instead, it would normally take up the available width. In that case, `text-align: center` would center the text inside that full-width block rather than centering the button box itself.
+
+So `inline-block` is what allows the button to have **block-like box behavior while still remaining inline-level content that its parent can center**.
+
+### Button Pseudo-Classes and Transitions
+
+The button uses pseudo-classes to style the same `<a>` element differently depending on its current state:
+
+```css
+.btn:link,
+.btn:visited {
+    transition: all .2s;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+}
+```
+
+The pseudo-classes represent different states of the link:
+
+- `:link` targets the normal, unvisited link state.
+- `:visited` targets a link that has already been visited.
+- `:hover` targets the element while the mouse is over it.
+- `:active` targets the element while it is being clicked or pressed.
+
+The `:link` and `:visited` rules are being used together as the button's **base states**. The hover and active rules then temporarily change properties such as `transform` and `box-shadow`.
+
+The transition is placed on the base `:link/:visited` rule:
+
+```css
+transition: all .2s;
+```
+
+This means changes between the base, hover, and active states are animated smoothly over `.2s`.
+
+Putting the transition on the base state is important because it allows the animation to work in both directions:
+
+- entering `:hover` or `:active`
+- returning from those states back to the base state
+
+A useful mental model is:
+
+> **The pseudo-classes define the different states of the same element, while `transition` controls how smoothly the element moves between those states.**

@@ -53,26 +53,30 @@ body{
 
 .text-box{
     /*
-     * Move the element's top-left corner to the center of its positioned ancestor.
-     * translate() then shifts it back by 50% of its own width and height,
-     * which centers the element itself rather than its top-left corner.
-     */
+    * Move the element's top-left corner toward the center of the header.
+    * translate() then shifts it back by 50% of its own width and height,
+    * which centers the element itself rather than its top-left corner.
+    *
+    * text-align: center centers the text  inside the button inside text-box alighing it to center of the text-box.
+    */
     position: absolute;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
 }
 
+/* Styles the entire h1 heading container, including both the main and subheading spans. */
 .heading-primary{
+    
     color: #fff;
-
-    /* Converts the displayed text to uppercase without changing the HTML text itself. */
     text-transform: uppercase;
 
     /* used to fix stuttering text during end of animation*/
     backface-visibility: hidden;
+    margin-bottom: 60px;
 }
-
+/* Styles the main heading span: "Outdoors". */
 .heading-primary-main{
     /*
      * These are span elements by default. display: block makes each span
@@ -101,6 +105,7 @@ body{
     animation-delay: 3s;*/
 }
 
+/* Styles the subheading span: "is where life happens". */
 .heading-primary-sub{
     /* Keeps the subtitle on its own line beneath the main heading. */
     display: block;
@@ -165,4 +170,52 @@ body{
         transform: translate(0);
     }
 
+}
+
+/* Styles the button in both its normal link and previously visited states. */
+.btn:link, 
+.btn:visited{
+
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 15px 40px;
+    display: inline-block;
+    border-radius: 100px;
+
+    /* 
+    * Smoothly animates property changes over .2 seconds.
+    * The transition is placed on the base :link/:visited rule so it is active
+    * when the button moves into and back out of the :hover and :active states.
+    */
+    transition: all .2s;
+}
+
+/* Moves the button slightly upward when the mouse is over it. */
+.btn:hover{
+
+    transform: translateY(-3px);
+
+    /*
+     * Adds a shadow with no horizontal x offset, 10px downward y offset,
+     * 20px blur, and black at 20% opacity.
+     * #0003 is shorthand for #00000033.
+     * With 000 being hex for black and 3 is the same as 20% opacity
+     */
+    box-shadow: 0 10px 20px #0003;
+}
+
+/* Moves the button closer to its original position when clicked, creating a pressed effect. */
+.btn:active{
+
+    transform: translateY(-1px);
+
+    /* Uses a smaller shadow to reinforce the pressed-down effect. */
+    box-shadow: 0 5px 10px #0003;
+}
+
+/* Provides the color styling for the white version of the button. */
+.btn-white{
+
+    background-color: #fff;
+    color: #777;
 }
