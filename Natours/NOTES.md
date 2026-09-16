@@ -463,3 +463,186 @@ Putting the transition on the base state is important because it allows the anim
 A useful mental model is:
 
 > **The pseudo-classes define the different states of the same element, while `transition` controls how smoothly the element moves between those states.**
+
+### Button `::after` Pseudo-Element and Animation
+
+The button now uses three classes:
+
+```html
+<a href="#" class="btn btn-white btn-animated">Discover our tours</a>
+```
+
+- `btn` provides the shared button styles.
+- `btn-white` provides the white button styling.
+- `btn-animated` adds the entrance animation.
+
+#### Creating the `::after` Pseudo-Element
+
+```css
+.btn::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+
+    transition: all .4s;
+}
+```
+
+`::after` creates an extra pseudo-element associated with the button without adding another HTML element.
+
+```css
+content: "";
+```
+
+is required for the pseudo-element to exist. It is empty because it is being used only for a visual effect.
+
+The pseudo-element is made the same size and shape as the button and positioned directly behind it with `position: absolute` and `z-index: -1`.
+
+A useful mental model is:
+
+> `::after` creates an extra visual layer behind the button that can be animated independently.
+
+The white button gives that layer the same background color:
+
+```css
+.btn-white::after {
+    background-color: #fff;
+}
+```
+
+#### Hover Effect
+
+```css
+.btn:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+}
+```
+
+This means:
+
+> When `.btn` is hovered, style its `::after` pseudo-element.
+
+The pseudo-element grows to:
+
+- `140%` of its original width with `scaleX(1.4)`
+- `160%` of its original height with `scaleY(1.6)`
+
+At the same time, `opacity: 0` makes it fade away.
+
+Because the base `::after` rule has:
+
+```css
+transition: all .4s;
+```
+
+the growth and fade happen smoothly.
+
+#### Button Entrance Animation
+
+```css
+.btn-animated {
+    animation: moveInButton .5s ease-out .75s;
+    animation-fill-mode: backwards;
+}
+```
+
+The animation shorthand is:
+
+```text
+name duration timing-function delay
+```
+
+So the button waits `.75s`, then runs `moveInButton` for `.5s`.
+
+`animation-fill-mode: backwards` applies the animation's starting styles during the delay, preventing the button from appearing in its normal position before the animation begins.
+
+### `animation-fill-mode: backwards`
+
+The button animation has a `.75s` delay before it begins:
+
+```css
+.btn-animated {
+    animation: moveInButton .5s ease-out .75s;
+    animation-fill-mode: backwards;
+}
+```
+
+During that delay, the animation has not started yet.
+
+Normally, the button would use its regular CSS styles while it waits. Then, when the animation starts, it would suddenly switch to the `0%` state from `moveInButton` before animating toward `100%`.
+
+`animation-fill-mode: backwards` prevents that jump by telling the browser to use the animation's **starting `0%` styles during the delay**, even though the animation itself has not started yet.
+
+The animation delay still exists. `backwards` does not remove or shorten the delay; it only changes what the element looks like while it is waiting.
+
+It also does **not** grab properties from another animation. It uses the starting keyframe from the animation already assigned to the element.
+
+A useful mental model is:
+
+> `backwards` applies the animation's starting appearance while the animation is waiting to begin.
+
+#### How `backwards` Uses the Starting Animation State
+
+So `backwards` is basically saying:
+
+> **"Fill the animation's waiting time with frame `0%`."**
+
+The word `backwards` refers to **time before the animation starts**. It does not mean the animation runs backward or that the button moves backward.
+
+The animation normally begins only after the `.75s` delay. `backwards` reaches **backward from that starting point into the delay** and extends the animation's starting appearance into that waiting time.
+
+The `0%` keyframe comes from the `@keyframes` rule for the animation assigned to the element. In this case, the button uses `moveInButton`:
+
+```css
+@keyframes moveInButton {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+```
+
+For `moveInButton`, the `0%` state means the button starts:
+
+- completely invisible because `opacity` is `0`
+- `30px` below its normal position because `translateY(30px)` moves it down
+
+During the `.75s` delay, `backwards` tells the browser to hold the button in that `0%` state:
+
+```css
+opacity: 0;
+transform: translateY(30px);
+```
+
+The animation is **not running yet** during the delay. The browser is simply holding the button in the same visual state that the animation will start from.
+
+Once the delay finishes, the animation begins from that same `0%` state and moves toward:
+
+```css
+100% {
+    opacity: 1;
+    transform: translateY(0);
+}
+```
+
+The button then fades in while moving upward into its normal position.
+
+Without `backwards`, the button could appear normally during the delay, then suddenly become invisible and jump `30px` down when the animation starts before moving upward again.
+
+With `backwards`, there is no sudden visual jump because the button is already displaying the animation's starting state when the animation begins.
+
+A useful way to picture the word `backwards` is:
+
+> **The animation starts after the delay, and `backwards` reaches backward in time from that start point and fills the delay with the animation's starting frame.**

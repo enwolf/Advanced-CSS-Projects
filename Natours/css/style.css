@@ -172,9 +172,29 @@ body{
 
 }
 
+
+@keyframes  moveInButton {
+    
+    /* Animation starting point: invisible and shifted 100px to the right. */
+    0%
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    
+    /* Finish fully visible and back at the element's original position. */
+    100%
+    {
+        opacity: 1;
+        transform: translate(0);
+    }
+
+}
+
+
 /* Styles the button in both its normal link and previously visited states. */
 .btn:link, 
-.btn:visited{
+.btn:visited {
 
     text-transform: uppercase;
     text-decoration: none;
@@ -188,10 +208,12 @@ body{
     * when the button moves into and back out of the :hover and :active states.
     */
     transition: all .2s;
+
+    position: relative;
 }
 
 /* Moves the button slightly upward when the mouse is over it. */
-.btn:hover{
+.btn:hover {
 
     transform: translateY(-3px);
 
@@ -205,7 +227,7 @@ body{
 }
 
 /* Moves the button closer to its original position when clicked, creating a pressed effect. */
-.btn:active{
+.btn:active {
 
     transform: translateY(-1px);
 
@@ -214,8 +236,62 @@ body{
 }
 
 /* Provides the color styling for the white version of the button. */
-.btn-white{
+.btn-white {
 
     background-color: #fff;
     color: #777;
+}
+
+.btn::after {
+    /* Required for the ::after pseudo-element to be created, but no visible content is needed. */
+    content: "";
+
+    display: inline-block; /*matches button also being an inline-block*/
+
+    /* Starts the pseudo-element at the same size as the button. */
+    height: 100%;
+    width: 100%;
+
+    /* Matches the rounded shape of the actual button. */
+    border-radius: 100px;
+
+    /*
+     * Positions the pseudo-element directly over the button.
+     * The button is position: relative, so it becomes the positioning reference.
+     */
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Places the pseudo-element behind the actual button. Think of it like sending it backward behind the button in Publisher. */
+    z-index: -1; 
+
+    /* Smoothly animates the scaling and opacity changes applied on hover. */
+    transition: all .4s;
+
+}
+
+.btn-white::after {
+    /* Gives the pseudo-element the same white background as the white button. */
+    background-color: #fff;
+}
+
+
+.btn:hover::after {
+    /* 1.4 x and 1.6 so x value being scaled by 40% and y value being scaled by 60% */
+    transform: scaleX(1.4) scaleY(1.6);
+
+    /* Fades the pseudo-element out as it expands. */
+    opacity: 0;
+}
+
+.btn-animated{
+    
+    /*
+     * animation shorthand order:
+     * name duration timing-function delay
+     */
+    animation: moveInButton .5s ease-out .75s; /* .25s felt snappier; keeping course value for now */
+
+    /* Applies the animation's starting state during the .75s delay before it begins. */
+    animation-fill-mode: backwards;
 }
