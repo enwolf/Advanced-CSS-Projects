@@ -1,2 +1,5 @@
 # Personal VS Code workspace custom theme settings for CSS
 .vscode/settings.json
+
+# Chat handoff files
+advanced-css-chat-handoff1.md
