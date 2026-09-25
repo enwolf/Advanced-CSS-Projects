@@ -575,3 +575,110 @@ Hover:  (0, 1, 3, 2)  ← wins
 Mental model:
 
 > **A state such as `:hover` does not automatically win. It still participates in the cascade like any other selector and must have enough specificity to override the competing declaration.**
+
+## CSS Value Processing
+
+Before a CSS value is actually rendered on the page, it can pass through several processing stages.
+
+```text
+Declared value
+      ↓
+Cascaded value
+      ↓
+Specified value
+      ↓
+Computed value
+      ↓
+Used value
+      ↓
+Actual value
+```
+
+## CSS Value Processing — Key Rules
+
+- Every CSS property has an **initial value**, used when nothing is declared and no value is inherited.
+- Browsers provide a root `font-size` for the page, commonly `16px`.
+- Percentages and relative units are resolved using the value they depend on.
+- `%` used for `font-size` is relative to the **parent's computed `font-size`**.
+- In the course's length example, `%` is measured relative to the **parent's computed width**.
+- `em` used for `font-size` is relative to the **parent's computed `font-size`**.
+- `em` used for lengths is relative to the **current element's computed `font-size`**.
+- `rem` is relative to the **document root's computed `font-size`**.
+- `vh` and `vw` are based on percentages of the viewport's height and width.
+
+A compact reference:
+
+```text
+% font-size  → parent's computed font-size
+% length     → parent's computed width in the course example
+
+em font-size → parent's computed font-size
+em length    → current element's computed font-size
+
+rem          → root computed font-size
+
+vh           → viewport height
+vw           → viewport width
+```
+
+> **Mental model:** A relative unit does not tell the browser a complete size by itself. It tells the browser **which other measurement to use as the reference for calculating that size**.
+
+### 3. Specified Value
+
+The **specified value** is the value the property will use after accounting for things such as defaulting when there is no cascaded value.
+
+Every CSS property has an **initial value** that can be used if nothing is declared and there is no inherited value.
+
+```text
++------------------+-----------------+-------------------+----------------+-------------------+---------------------+
+| Processing Stage | Paragraph Width | Paragraph Padding | Root Font Size | Section Font Size | Paragraph Font Size |
++------------------+-----------------+-------------------+----------------+-------------------+---------------------+
+| Declared         | 140px / 66%     | --                | --             | 1.5rem            | --                  |
+| Cascaded         | 66%             | --                | 16px default   | 1.5rem            | --                  |
+| Specified        | 66%             | 0px initial       | 16px           | 1.5rem            | 24px inherited      |
+| Computed         | 66%             | 0px               | 16px           | 24px              | 24px                |
+| Used             | 184.8px         | 0px               | 16px           | 24px              | 24px                |
+| Actual           | 185px           | 0px               | 16px           | 24px              | 24px                |
++------------------+-----------------+-------------------+----------------+-------------------+---------------------+
+```
+
+This demonstrates several different parts of value processing at once:
+
+- the cascade chooses `66%` instead of `140px`
+- undeclared padding falls back to its initial value of `0px`
+- the browser supplies a default root font size of `16px`
+- `1.5rem` becomes `24px`
+- the paragraph inherits the `24px` font size
+- the percentage width remains `66%` until layout provides enough information
+- the used width becomes `184.8px`
+- the browser ultimately renders approximately `185px`
+
+> **Mental model:** CSS values move from **what was written → what wins → what value applies → what that value means → what fits the layout → what can actually be rendered**.
+
+## CSS Inheritance
+
+Inheritance allows certain CSS property values to pass from **parent elements to their children**, which helps reduce repetition and makes CSS easier to maintain.
+
+Properties related to text commonly inherit, including:
+
+- `font-family`
+- `font-size`
+- `color`
+
+The value that gets inherited is the property's **computed value**, not necessarily the value originally written in the CSS.
+
+For example:
+
+```css
+body {
+    font-size: 1.5rem;
+}
+
+If `1.5rem` computes to `24px`, child elements that inherit the font size receive the computed `24px` value.
+
+Inheritance normally applies when the child does not declare its own value for that property.
+
+Two useful keywords can control this behavior:
+
+```css
+color: inherit;
