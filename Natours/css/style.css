@@ -54,19 +54,19 @@ body {
     clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); /* Clips the header into a polygon, creating the diagonal bottom edge. */
 }
 
-.logo-box{
+.header__logo-box{
     /* Position the logo relative to the nearest positioned ancestor. */
     position: absolute;
     top: 4rem;
     left: 4rem; 
 }
 
-.logo{
+.header__logo{
     /* Setting only the height lets the width scale automatically to preserve the image's aspect ratio. */
     height: 3.5rem;
 }
 
-.text-box{
+.header__text-box{
     /*
     * Move the element's top-left corner toward the center of the header.
     * translate() then shifts it back by 50% of its own width and height,
@@ -92,7 +92,7 @@ body {
     margin-bottom: 6rem;
 }
 /* Styles the main heading span: "Outdoors". */
-.heading-primary-main{
+.heading-primary--main{
     /*
      * These are span elements by default. display: block makes each span
      * take its own line instead of remaining inline with the other text.
@@ -121,7 +121,7 @@ body {
 }
 
 /* Styles the subheading span: "is where life happens". */
-.heading-primary-sub{
+.heading-primary--sub{
     /* Keeps the subtitle on its own line beneath the main heading. */
     display: block;
     font-size: 2rem;
@@ -252,7 +252,7 @@ body {
 }
 
 /* Provides the color styling for the white version of the button. */
-.btn-white {
+.btn--white {
 
     background-color: #fff;
     color: #777;
@@ -286,7 +286,7 @@ body {
 
 }
 
-.btn-white::after {
+.btn--white::after {
     /* Gives the pseudo-element the same white background as the white button. */
     background-color: #fff;
 }
@@ -300,7 +300,7 @@ body {
     opacity: 0;
 }
 
-.btn-animated{
+.btn--animated{
     
     /*
      * animation shorthand order:

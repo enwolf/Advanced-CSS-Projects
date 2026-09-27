@@ -16,26 +16,33 @@
         
         <title>Natours | Exciting tours for adventurous people</title>
     </head>
-
     <body>
         <!-- Hero/header section containing the logo and primary page heading. -->
+        <!--
+            BEM naming:
+            block              = standalone component, e.g. header, heading-primary, btn
+            block__element     = part of a block, e.g. header__logo-box
+            block--modifier    = variation of a block, e.g. btn--white
+        -->
         <header class="header">
 
             <!-- Logo container is positioned independently within the header. -->
-            <div class="logo-box">
-                <img src="img/logo-white.png" alt="Logo" class="logo">
+            <div class="header__logo-box">
+                <img src="img/logo-white.png" alt="Logo" class="header__logo">
             </div>
 
             <!-- Wraps and groups the heading text and button so they can be positioned and centered together. -->
-            <div class="text-box">
+            <div class="header__text-box">
                 <h1 class="heading-primary">
                     <!-- Spans allow each part of the same h1 to be styled separately. -->
-                    <span class="heading-primary-main">Outdoors</span>
-                    <span class="heading-primary-sub">is where life happens</span>                
+                    <span class="heading-primary--main">Outdoors</span>
+                    <span class="heading-primary--sub">is where life happens</span>                
                 </h1>
                 <!-- This element uses two classes space-separated: btn for shared button styles and btn-white for white button styles. -->
-                <a href="#" class="btn btn-white btn-animated">Discover our tours</a>
+                <!-- btn provides the base button styles; btn--white and btn--animated are BEM modifiers. -->
+                <a href="#" class="btn btn--white btn--animated">Discover our tours</a>
             </div>
+
 
         </header>
     </body>
