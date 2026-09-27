@@ -7,19 +7,34 @@ Dark green: #28b485
 
 */
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*,
+*::after,
+*::before {
+    margin: 0;  /* direct reset */
+    padding: 0; /* direct reset */
+
+    /* Gives every element the instruction to inherit its box-sizing value. */
+    box-sizing: inherit; /* inheritance instruction */
 }
 
-body{
+html {
+    /* 62.5% of the browser's default 16px = 10px, so 1rem is approximately 10px. */
+    font-size: 62.5%;
+}
+
+body {
     font-family: "Lato", sans-serif;
     font-weight: 400;
-    font-size: 16px;
+
+    /* Removed the hard-coded 16px size; font sizing is now based on the root rem scale. */
+    /* font-size: 16px; */
+
     line-height: 1.7;
     color: #777;
-    padding: 30px;
+    padding: 3rem;
+
+    /* Establishes border-box as the site's sizing model; descendants inherit it through the reset above. */
+    box-sizing: border-box;
 }
 
 .header{
@@ -42,13 +57,13 @@ body{
 .logo-box{
     /* Position the logo relative to the nearest positioned ancestor. */
     position: absolute;
-    top: 40px;
-    left: 40px;
+    top: 4rem;
+    left: 4rem; 
 }
 
 .logo{
     /* Setting only the height lets the width scale automatically to preserve the image's aspect ratio. */
-    height: 35px;
+    height: 3.5rem;
 }
 
 .text-box{
@@ -74,7 +89,7 @@ body{
 
     /* used to fix stuttering text during end of animation*/
     backface-visibility: hidden;
-    margin-bottom: 60px;
+    margin-bottom: 6rem;
 }
 /* Styles the main heading span: "Outdoors". */
 .heading-primary-main{
@@ -83,9 +98,9 @@ body{
      * take its own line instead of remaining inline with the other text.
      */
     display: block;
-    font-size: 60px;
+    font-size: 6rem;
     font-weight:  400;
-    letter-spacing: 35px;
+    letter-spacing: 3.5rem;
 
     /* Applies the moveInLeft @keyframes animation to this element. */
     animation-name: moveInLeft;
@@ -109,10 +124,10 @@ body{
 .heading-primary-sub{
     /* Keeps the subtitle on its own line beneath the main heading. */
     display: block;
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 700;
-    letter-spacing: 17.4px;
-    
+    letter-spacing: 1.75rem; /* 17.4 pixels converts roughly to 1.75rem */
+
     /* Shorthand for:
        animation-name: moveInRight;
        animation-duration: 1s;
@@ -129,13 +144,13 @@ body{
     0%
     {
         opacity: 0;
-        transform: translateX(-100px);
+        transform: translateX(-10rem);
     }
     
     /* Near the end, move slightly past the final position to create an overshoot effect. */
     80%
     {
-        transform: translateX(10px);
+        transform: translateX(1rem);
     }
 
     /* Finish fully visible and back at the element's original position. */
@@ -154,13 +169,13 @@ body{
     0%
     {
         opacity: 0;
-        transform: translateX(100px);
+        transform: translateX(10rem); /*converted from 100px to 10 rem*/
     }
     
     /* Near the end, move slightly past the final position to create an overshoot effect. */
     80%
     {
-        transform: translateX(-10px);
+        transform: translateX(-1rem);
     }
 
     /* Finish fully visible and back at the element's original position. */
@@ -179,7 +194,7 @@ body{
     0%
     {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(3rem);
     }
     
     /* Finish fully visible and back at the element's original position. */
@@ -198,9 +213,9 @@ body{
 
     text-transform: uppercase;
     text-decoration: none;
-    padding: 15px 40px;
+    padding: 1.5rem 4rem;
     display: inline-block;
-    border-radius: 100px;
+    border-radius: 10rem;
 
     /* 
     * Smoothly animates property changes over .2 seconds.
@@ -208,8 +223,9 @@ body{
     * when the button moves into and back out of the :hover and :active states.
     */
     transition: all .2s;
-
     position: relative;
+    font-size: 1.6rem;
+
 }
 
 /* Moves the button slightly upward when the mouse is over it. */
@@ -223,7 +239,7 @@ body{
      * #0003 is shorthand for #00000033.
      * With 000 being hex for black and 3 is the same as 20% opacity
      */
-    box-shadow: 0 10px 20px #0003;
+    box-shadow: 0 1rem 2rem #0003;
 }
 
 /* Moves the button closer to its original position when clicked, creating a pressed effect. */
@@ -232,7 +248,7 @@ body{
     transform: translateY(-1px);
 
     /* Uses a smaller shadow to reinforce the pressed-down effect. */
-    box-shadow: 0 5px 10px #0003;
+    box-shadow: 0 .5rem 1rem #0003; /*value black and 3 opacity is equal to .2 rgba value)*/
 }
 
 /* Provides the color styling for the white version of the button. */
@@ -253,7 +269,7 @@ body{
     width: 100%;
 
     /* Matches the rounded shape of the actual button. */
-    border-radius: 100px;
+    border-radius: 10rem;
 
     /*
      * Positions the pseudo-element directly over the button.
