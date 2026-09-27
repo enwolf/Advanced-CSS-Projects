@@ -673,6 +673,7 @@ For example:
 body {
     font-size: 1.5rem;
 }
+```
 
 If `1.5rem` computes to `24px`, child elements that inherit the font size receive the computed `24px` value.
 
@@ -682,3 +683,155 @@ Two useful keywords can control this behavior:
 
 ```css
 color: inherit;
+```
+
+- `inherit` forces the property to use the value from its parent.
+
+```css
+color: initial;
+```
+
+- `initial` resets the property to its defined initial value.
+
+> **Mental model:** Inheritance lets children reuse certain computed values from their parents unless they are given their own value.
+
+## Box Model: `content-box` vs `border-box`
+
+The two box model diagrams make the difference between the default `content-box` model and `border-box` much clearer.
+
+With the default `content-box` model:
+
+```text
+specified width
+= content width
+
+total width
+= border + padding + specified width + padding + border
+```
+
+For example:
+
+```css
+width: 300px;
+padding: 20px;
+border: 5px solid;
+```
+
+produces:
+
+```text
+5px border
++ 20px padding
++ 300px content
++ 20px padding
++ 5px border
+= 350px total width
+```
+
+With:
+
+```css
+box-sizing: border-box;
+```
+
+the meaning of the specified width changes:
+
+```text
+specified width
+= content + padding + border
+```
+
+So the same example becomes:
+
+```text
+300px total width
+- 40px horizontal padding
+- 10px horizontal border
+= 250px content width
+```
+
+A useful mental model is:
+
+```text
+content-box
+width means:
+"make my CONTENT this wide"
+
+border-box
+width means:
+"make my WHOLE BOX this wide"
+```
+
+In both models, margin remains outside the box:
+
+```text
+content + padding + border
+= box
+
+margin
+= outside the box
+```
+
+One important detail from the `border-box` diagram: the padding and border terms being crossed out does **not** mean padding and borders disappear.
+
+It means they are no longer added **on top of** the specified width because they are already included inside it.
+
+> **Mental model:** `border-box` does not remove padding or borders; it makes the browser fit them inside the width or height you specified.
+
+## BEM Naming
+
+BEM stands for:
+
+```text
+Block
+Element
+Modifier
+```
+
+The naming pattern is:
+
+```text
+block
+block__element
+block--modifier
+```
+
+Examples from Natours:
+
+```text
+header
+→ block
+
+header__logo-box
+→ element inside the header block
+
+btn
+→ block
+
+btn--white
+→ modified version of the button block
+```
+
+> **Mental model:** `__` means “belongs to this block,” while `--` means “variation of this block.”
+
+### Course Naming Caveat
+
+The course uses:
+
+```text
+heading-primary--main
+heading-primary--sub
+```
+
+for the two parts of the main heading.
+
+In stricter BEM terminology, `--` usually means a **modifier**, while `__` usually means an **element that belongs to the block**.
+
+So a stricter BEM interpretation might use:
+
+```text
+heading-primary__main
+heading-primary__sub
+```
+
+The course convention is still useful for learning the overall BEM structure, so it makes sense to follow the project as taught while keeping that distinction in mind.

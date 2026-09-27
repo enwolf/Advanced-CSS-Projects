@@ -647,5 +647,371 @@ A useful way to picture the word `backwards` is:
 
 > **The animation starts after the delay, and `backwards` reaches backward in time from that start point and fills the delay with the animation's starting frame.**
 
+## Refactoring Natours from `px` to `rem`
 
+Natours was refactored so many fixed pixel measurements now use a shared `rem` scale.
 
+The root font size is set on `html`:
+
+```css
+html {
+    font-size: 62.5%;
+}
+```
+
+Because browsers commonly use a `16px` default:
+
+```text
+16px × 62.5% = 10px
+```
+
+This keeps the conversion math simple:
+
+```text
+1rem   ≈ 10px
+2rem   ≈ 20px
+3.5rem ≈ 35px
+6rem   ≈ 60px
+```
+
+So an old value such as:
+
+```css
+padding: 30px;
+```
+
+can become:
+
+```css
+padding: 3rem;
+```
+
+### What Was Converted in Natours
+
+The refactor was applied broadly to pixel-based measurements throughout the existing project.
+
+Examples include:
+
+```text
+40px  → 4rem
+35px  → 3.5rem
+60px  → 6rem
+20px  → 2rem
+100px → 10rem
+30px  → 3rem
+15px  → 1.5rem
+10px  → 1rem
+5px   → .5rem
+```
+
+The converted values are not limited to font sizes.
+
+The updated stylesheet uses `rem` for things such as:
+
+- padding
+- margins
+- logo dimensions
+- heading font sizes
+- letter spacing
+- animation movement
+- button padding
+- border radius
+- box-shadow offsets and blur
+
+### Why Use `rem`?
+
+`rem` values are calculated from the root `html` font size.
+
+```text
+html font-size
+      ↓
+     rem
+  ↙   ↓   ↘
+text spacing sizing
+```
+
+This gives many measurements throughout the project one shared reference point instead of treating every value as an unrelated fixed pixel size.
+
+The previous hard-coded `body { font-size: 16px; }` was also removed, leaving the root `html` font size as the shared reference for the project's `rem`-based sizing.
+
+> **Mental model:** `rem` creates a shared sizing system controlled by the root font size.
+
+### `rem` Does Not Automatically Mean Responsive
+
+Temporarily changing the root font size demonstrated how the system works.
+
+For example, changing:
+
+```css
+html {
+    font-size: 5px;
+}
+```
+
+caused all `rem`-based measurements to shrink together:
+
+```text
+3.5rem = 35px   with a 10px root
+3.5rem = 17.5px with a 5px root
+```
+
+Converting values to `rem` does **not** make the page responsive by itself.
+
+Instead:
+
+```text
+rem
+ ↓
+creates a shared scale
+
+changing the root size
+ ↓
+changes that scale
+```
+
+### Not Everything Should Become `rem`
+
+The goal is not to replace every CSS unit.
+
+Existing units still make sense when they describe a different relationship:
+
+```css
+height: 95vh;
+top: 40%;
+left: 50%;
+transform: translate(-50%, -50%);
+```
+
+Small, precise effects can also remain in pixels:
+
+```css
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+}
+```
+
+Using `-.3rem` or `-.1rem` here would provide little benefit and would arguably make the intent less clear.
+
+> **Mental model:** Use the unit that best describes the relationship you want. `rem` is the shared root-based scale, but `%`, `vh`, and `px` still have useful jobs.
+
+### Debugging Breadcrumb
+
+During the scaling test, the logo initially did not shrink because the `<img>` was missing its `.logo` class, so this rule was never applied:
+
+```css
+.logo {
+    height: 3.5rem;
+}
+```
+
+DevTools made the problem obvious because the `.logo` rule was missing from the styles matched to the selected image.
+
+> **Debugging breadcrumb:** If one element is not responding like the other `rem`-based elements, check which CSS rules actually match it and inspect its computed size.
+
+### Inheriting `box-sizing`
+
+The original reset applied `border-box` directly to every element:
+
+```css
+* {
+    box-sizing: border-box;
+}
+```
+
+The project now uses:
+
+```css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+body {
+    box-sizing: border-box;
+}
+```
+
+`box-sizing` does **not** normally inherit automatically.
+
+```css
+box-sizing: inherit;
+```
+
+explicitly tells an element:
+
+> **Use your parent's computed `box-sizing` value for this property.**
+
+Since `body` establishes:
+
+```css
+box-sizing: border-box;
+```
+
+its descendants can inherit that same sizing model:
+
+```text
+body: border-box
+       ↓
+child: inherit
+       ↓
+border-box
+```
+
+### What `border-box` Means
+
+With the default `content-box` model:
+
+```text
+declared width
+     ↓
+content only
++ padding
++ border
+= actual outer size
+```
+
+With `border-box`:
+
+```text
+declared width
+     ↓
+content
++ padding
++ border
+all fit inside that width
+```
+
+For example:
+
+```css
+width: 300px;
+padding: 20px;
+border: 5px solid;
+```
+
+With `content-box`, the total width becomes `350px`.
+
+With `border-box`, the entire element remains `300px` wide.
+
+An important detail is that **margin is not included**:
+
+```text
+border-box width
+= content + padding + border
+
+margin
+= outside the declared width
+```
+
+### CSS Inheritance vs OOP Inheritance
+
+CSS inheritance has the same basic idea of **getting something from a parent**, but it is much simpler than OOP inheritance.
+
+```text
+OOP
+parent class
+    ↓
+child inherits members / behavior
+
+CSS
+parent element
+    ↓
+child receives a property value
+```
+
+`box-sizing: inherit` only affects the `box-sizing` property. It does not mean the element inherits all of its parent's CSS.
+
+> **Mental model:** `body` establishes the sizing rule; `inherit` passes that specific property value down the DOM tree.
+
+### Pseudo-Elements
+
+The universal selector:
+
+```css
+*
+```
+
+does not include pseudo-elements such as `::before` and `::after`.
+
+A more complete reset can therefore use:
+
+```css
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+```
+
+This lets pseudo-elements follow the same sizing model as the rest of the page.
+
+### Universal Reset and `box-sizing` Inheritance
+
+The reset and the `body` rule work together:
+
+```css
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+body {
+    box-sizing: border-box;
+}
+```
+
+The universal selector does not establish `border-box` by itself. It gives every matched element the instruction to inherit its `box-sizing` value.
+
+The `body` rule supplies the actual value:
+
+```text
+universal reset
+→ tells elements to inherit box-sizing
+
+body
+→ establishes border-box
+```
+
+That value then flows down through the DOM because descendants have:
+
+```css
+box-sizing: inherit;
+```
+
+> **Mental model:** the reset distributes the instruction; `body` supplies the value.
+
+### BEM Refactor in Natours
+
+The existing Natours classes were refactored to use BEM-style naming so the relationships between components and their parts are clearer.
+
+Examples of the changes include:
+
+```text
+logo-box       → header__logo-box
+logo           → header__logo
+text-box       → header__text-box
+
+btn-white      → btn--white
+btn-animated   → btn--animated
+```
+
+The primary heading classes were also renamed to follow the convention used by the course:
+
+```text
+heading-primary-main → heading-primary--main
+heading-primary-sub  → heading-primary--sub
+```
+
+The corresponding selectors in `style.css` were updated so the existing layout, styling, and animations continue to work with the renamed classes.
+
+A short BEM reference was also added to `index.html` to make the naming pattern easier to recognize while working in the project.
+
+> **Project note:** This was primarily a naming/architecture refactor rather than a visual change. See the course-wide notes for the full BEM explanation and naming caveat.
