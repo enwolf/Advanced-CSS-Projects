@@ -835,3 +835,337 @@ heading-primary__sub
 ```
 
 The course convention is still useful for learning the overall BEM structure, so it makes sense to follow the project as taught while keeping that distinction in mind.
+
+## Sass and SCSS
+
+**Sass** is a CSS preprocessor that adds features on top of regular CSS to make stylesheets easier to organize, reuse, and maintain.
+
+Some of the features Sass provides include:
+
+- variables
+- nesting
+- operators
+- partials and modules
+- mixins
+- functions
+- extends
+- control logic
+
+The browser does **not** understand Sass directly. Sass code is processed first and compiled into normal CSS that the browser can use.
+
+```text
+SCSS
+ ↓
+Sass compiler
+ ↓
+CSS
+ ↓
+Browser
+```
+
+The course uses **SCSS**, which is the CSS-like syntax for Sass and uses `.scss` files.
+
+For example, SCSS can contain:
+
+```scss
+$color-primary: #f9ed69;
+
+nav {
+    background-color: $color-primary;
+}
+```
+
+Sass then generates ordinary CSS from it.
+
+> **Mental model:** Sass gives us additional tools for writing and organizing CSS; the final result is still regular CSS that gets sent to the browser.
+
+### How SCSS Compiles to CSS
+
+SCSS is not sent directly to the browser. Sass processes it first and outputs normal CSS.
+
+For example:
+
+```scss
+$color-primary: #f9ed69;
+
+nav {
+    background-color: $color-primary;
+
+    &::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+}
+```
+
+compiles to:
+
+```css
+nav {
+    background-color: #f9ed69;
+}
+
+nav::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+```
+
+A few important transformations happen during compilation:
+
+```text
+$variable
+→ replaced with its value
+
+nested selector
+→ expanded into a normal CSS selector
+
+&
+→ represents the current parent selector
+
+Sass function
+→ calculated before the final CSS is produced
+```
+
+For example:
+
+```scss
+.btn-main {
+    &:link {
+        background-color: $color-secondary;
+    }
+}
+```
+
+becomes:
+
+```css
+.btn-main:link {
+    background-color: #f08a5d;
+}
+```
+
+> **Mental model:** SCSS gives us extra syntax for organizing and generating CSS, but the browser still receives ordinary CSS.
+
+### Mixins, Extends, and Functions
+
+Sass provides several different ways to reuse code.
+
+#### Mixins
+
+A mixin stores a reusable group of CSS declarations:
+
+```scss
+@mixin style-link-text($color) {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: $color;
+}
+```
+
+It can then be inserted with:
+
+```scss
+@include style-link-text($color-text-dark);
+```
+
+Mixins can also accept parameters, allowing the same reusable styles to be customized with different values.
+
+```text
+@mixin
+→ reusable CSS declarations
+
+@include
+→ insert those declarations here
+```
+
+#### Placeholders and `@extend`
+
+A placeholder selector begins with `%`:
+
+```scss
+%btn-placeholder {
+    padding: 10px;
+    display: inline-block;
+    width: $width-button;
+}
+```
+
+Other selectors can reuse it with:
+
+```scss
+@extend %btn-placeholder;
+```
+
+Unlike a mixin, `@extend` does not simply copy the declarations into each selector. Sass combines selectors in the generated CSS so they share the same rule.
+
+The `%` placeholder itself does not produce CSS unless something extends it.
+
+```text
+%mixin-like placeholder
+        ↓
+     @extend
+        ↓
+selectors share the generated CSS rule
+```
+
+#### Functions
+
+A Sass function calculates and returns a value:
+
+```scss
+@function divide($a, $b) {
+    @return $a / $b;
+}
+```
+> **Modern Sass note:** The course uses the older `/` syntax for division, but modern Sass uses `math.div()` instead. This requires loading Sass's math module with `@use "sass:math";`, for example `@return math.div($a, $b);`.
+
+That returned value can then be used inside another declaration:
+
+```scss
+margin: divide(60, 2) * 1px;
+```
+
+```text
+mixin
+→ produces CSS declarations
+
+extend
+→ shares an existing set of declarations between selectors
+
+function
+→ returns a value
+```
+
+> **Mental model:** Use a mixin when you want to insert reusable CSS, `@extend` when selectors should share a common rule, and a function when you need Sass to calculate and return a value.
+
+### Local Sass / npm Setup
+
+The course project now uses Sass installed locally through npm.
+
+The course originally uses the older `node-sass` package, but this project uses the current `sass` package instead:
+
+```powershell
+npm install sass --save-dev
+```
+
+This adds Sass as a development dependency in `package.json`.
+
+```text
+package.json
+→ records the dependency
+
+node_modules/
+→ contains the installed packages locally
+
+package-lock.json
+→ records the exact dependency versions
+```
+
+`node_modules/` is ignored by Git because it can be recreated with:
+
+```powershell
+npm install
+```
+
+The Sass compiler is run through an npm script:
+
+```json
+"compile:sass": "sass Natours/sass/main.scss Natours/css/style.css --watch"
+```
+
+Because `package.json` lives at the `Advanced-CSS-Projects` repo root, the paths include the `Natours/` directory.
+
+```text
+Natours/sass/main.scss
+        ↓
+      Sass
+        ↓
+Natours/css/style.css
+```
+
+`--watch` compiles immediately and then keeps running, recompiling the CSS whenever the SCSS changes.
+
+```powershell
+npm run compile:sass
+```
+
+> **Mental model:** npm manages the Sass tool; the npm script tells Sass which SCSS file to watch and which CSS file to generate.
+
+### Restarting the Natours Development Setup
+
+If VS Code, the terminals, or the computer are restarted, both the Sass watcher and live server need to be started again.
+
+First open the repo root:
+
+```powershell
+cd "C:\Users\robin\Visual Studio Code Workspace\Advanced-CSS-Projects"
+```
+
+Then use two terminals.
+
+**Terminal 1 — Sass compiler:**
+
+```powershell
+npm run compile:sass
+```
+
+This watches:
+
+```text
+Natours/sass/main.scss
+        ↓
+compiles changes
+        ↓
+Natours/css/style.css
+```
+
+**Terminal 2 — Live server:**
+
+```powershell
+npm start
+```
+
+This serves the Natours project and reloads the browser when files change.
+
+```text
+Terminal 1
+Sass watcher
+→ SCSS changes become CSS
+
+Terminal 2
+Live server
+→ browser reloads when the generated CSS or HTML changes
+```
+
+Both commands should be run from:
+
+```text
+C:\Users\robin\Visual Studio Code Workspace\Advanced-CSS-Projects
+```
+
+There is no need to reinstall the packages after a normal restart. If `node_modules/` is ever missing, run:
+
+```powershell
+npm install
+```
+
+first to restore the dependencies from `package.json` / `package-lock.json`.
+
+> **Mental model:** Sass updates the CSS; live-server updates the browser. Both processes need to be running while developing Natours.
+
+`live-server` is also installed as a local development dependency:
+
+```powershell
+npm install live-server --save-dev
+```
+
+Rather than installing it globally, the project runs it through the `start` npm script:
+
+```json
+"start": "live-server Natours"
+```
+
+This keeps the development tooling attached to the project instead of installing it system-wide.
