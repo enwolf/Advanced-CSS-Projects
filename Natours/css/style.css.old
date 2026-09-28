@@ -1,0 +1,313 @@
+/*
+COLORS:
+
+Light green: #7ed56f
+Medium green: #55c57a
+Dark green: #28b485
+
+*/
+
+*,
+*::after,
+*::before {
+    margin: 0;  /* direct reset */
+    padding: 0; /* direct reset */
+
+    /* Gives every element the instruction to inherit its box-sizing value. */
+    box-sizing: inherit; /* inheritance instruction */
+}
+
+html {
+    /* 62.5% of the browser's default 16px = 10px, so 1rem is approximately 10px. */
+    font-size: 62.5%;
+}
+
+body {
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+
+    /* Removed the hard-coded 16px size; font sizing is now based on the root rem scale. */
+    /* font-size: 16px; */
+
+    line-height: 1.7;
+    color: #777;
+    padding: 3rem;
+
+    /* Establishes border-box as the site's sizing model; descendants inherit it through the reset above. */
+    box-sizing: border-box;
+}
+
+.header{
+    height: 95vh;
+
+    /* Both gradient colors use 80% opacity:
+       rgba() expresses it as 0.8, while 8-digit hex uses CC as the alpha value. */
+    background-image: linear-gradient(
+        to right bottom,
+        rgba(126, 213, 111, 0.8 ),
+        #28b485cc),
+    url(../img/hero.jpg);        
+    background-size: cover; /* Scales the background image to cover the entire element, cropping if necessary. */
+    background-position: top; 
+    position: relative;
+
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); /* Clips the header into a polygon, creating the diagonal bottom edge. */
+}
+
+.header__logo-box{
+    /* Position the logo relative to the nearest positioned ancestor. */
+    position: absolute;
+    top: 4rem;
+    left: 4rem; 
+}
+
+.header__logo{
+    /* Setting only the height lets the width scale automatically to preserve the image's aspect ratio. */
+    height: 3.5rem;
+}
+
+.header__text-box{
+    /*
+    * Move the element's top-left corner toward the center of the header.
+    * translate() then shifts it back by 50% of its own width and height,
+    * which centers the element itself rather than its top-left corner.
+    *
+    * text-align: center centers the text  inside the button inside text-box alighing it to center of the text-box.
+    */
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* Styles the entire h1 heading container, including both the main and subheading spans. */
+.heading-primary{
+    
+    color: #fff;
+    text-transform: uppercase;
+
+    /* used to fix stuttering text during end of animation*/
+    backface-visibility: hidden;
+    margin-bottom: 6rem;
+}
+/* Styles the main heading span: "Outdoors". */
+.heading-primary--main{
+    /*
+     * These are span elements by default. display: block makes each span
+     * take its own line instead of remaining inline with the other text.
+     */
+    display: block;
+    font-size: 6rem;
+    font-weight:  400;
+    letter-spacing: 3.5rem;
+
+    /* Applies the moveInLeft @keyframes animation to this element. */
+    animation-name: moveInLeft;
+
+    /* The animation takes 1 second to complete from 0% to 100%. */
+    animation-duration: 1s;
+
+    /* Starts relatively quickly and slows down as it reaches the end. */
+    animation-timing-function: ease-out;
+
+
+    /* 
+    Runs the animation multiple times instead of only once.
+    animation-iteration-count: 3;
+
+    Waits 3 seconds before starting the animation.
+    animation-delay: 3s;*/
+}
+
+/* Styles the subheading span: "is where life happens". */
+.heading-primary--sub{
+    /* Keeps the subtitle on its own line beneath the main heading. */
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1.75rem; /* 17.4 pixels converts roughly to 1.75rem */
+
+    /* Shorthand for:
+       animation-name: moveInRight;
+       animation-duration: 1s;
+       animation-timing-function: ease-out;
+    */
+    animation: moveInRight 1s ease-out;
+}
+
+
+/* Moves the element in from the left, slightly overshoots, then settles into place. */
+@keyframes  moveInLeft {
+    
+    /* Animation starting point: invisible and shifted 100px to the left. */
+    0%
+    {
+        opacity: 0;
+        transform: translateX(-10rem);
+    }
+    
+    /* Near the end, move slightly past the final position to create an overshoot effect. */
+    80%
+    {
+        transform: translateX(1rem);
+    }
+
+    /* Finish fully visible and back at the element's original position. */
+    100%
+    {
+        opacity: 1;
+        transform: translate(0);
+    }
+
+}
+
+/* Moves the element in from the right, slightly overshoots, then settles into place. */
+@keyframes  moveInRight {
+    
+    /* Animation starting point: invisible and shifted 100px to the right. */
+    0%
+    {
+        opacity: 0;
+        transform: translateX(10rem); /*converted from 100px to 10 rem*/
+    }
+    
+    /* Near the end, move slightly past the final position to create an overshoot effect. */
+    80%
+    {
+        transform: translateX(-1rem);
+    }
+
+    /* Finish fully visible and back at the element's original position. */
+    100%
+    {
+        opacity: 1;
+        transform: translate(0);
+    }
+
+}
+
+
+@keyframes  moveInButton {
+    
+    /* Animation starting point: invisible and shifted 100px to the right. */
+    0%
+    {
+        opacity: 0;
+        transform: translateY(3rem);
+    }
+    
+    /* Finish fully visible and back at the element's original position. */
+    100%
+    {
+        opacity: 1;
+        transform: translate(0);
+    }
+
+}
+
+
+/* Styles the button in both its normal link and previously visited states. */
+.btn:link, 
+.btn:visited {
+
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1.5rem 4rem;
+    display: inline-block;
+    border-radius: 10rem;
+
+    /* 
+    * Smoothly animates property changes over .2 seconds.
+    * The transition is placed on the base :link/:visited rule so it is active
+    * when the button moves into and back out of the :hover and :active states.
+    */
+    transition: all .2s;
+    position: relative;
+    font-size: 1.6rem;
+
+}
+
+/* Moves the button slightly upward when the mouse is over it. */
+.btn:hover {
+
+    transform: translateY(-3px);
+
+    /*
+     * Adds a shadow with no horizontal x offset, 10px downward y offset,
+     * 20px blur, and black at 20% opacity.
+     * #0003 is shorthand for #00000033.
+     * With 000 being hex for black and 3 is the same as 20% opacity
+     */
+    box-shadow: 0 1rem 2rem #0003;
+}
+
+/* Moves the button closer to its original position when clicked, creating a pressed effect. */
+.btn:active {
+
+    transform: translateY(-1px);
+
+    /* Uses a smaller shadow to reinforce the pressed-down effect. */
+    box-shadow: 0 .5rem 1rem #0003; /*value black and 3 opacity is equal to .2 rgba value)*/
+}
+
+/* Provides the color styling for the white version of the button. */
+.btn--white {
+
+    background-color: #fff;
+    color: #777;
+}
+
+.btn::after {
+    /* Required for the ::after pseudo-element to be created, but no visible content is needed. */
+    content: "";
+
+    display: inline-block; /*matches button also being an inline-block*/
+
+    /* Starts the pseudo-element at the same size as the button. */
+    height: 100%;
+    width: 100%;
+
+    /* Matches the rounded shape of the actual button. */
+    border-radius: 10rem;
+
+    /*
+     * Positions the pseudo-element directly over the button.
+     * The button is position: relative, so it becomes the positioning reference.
+     */
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Places the pseudo-element behind the actual button. Think of it like sending it backward behind the button in Publisher. */
+    z-index: -1; 
+
+    /* Smoothly animates the scaling and opacity changes applied on hover. */
+    transition: all .4s;
+
+}
+
+.btn--white::after {
+    /* Gives the pseudo-element the same white background as the white button. */
+    background-color: #fff;
+}
+
+
+.btn:hover::after {
+    /* 1.4 x and 1.6 so x value being scaled by 40% and y value being scaled by 60% */
+    transform: scaleX(1.4) scaleY(1.6);
+
+    /* Fades the pseudo-element out as it expands. */
+    opacity: 0;
+}
+
+.btn--animated{
+    
+    /*
+     * animation shorthand order:
+     * name duration timing-function delay
+     */
+    animation: moveInButton .5s ease-out .75s; /* .25s felt snappier; keeping course value for now */
+
+    /* Applies the animation's starting state during the .75s delay before it begins. */
+    animation-fill-mode: backwards;
+}
