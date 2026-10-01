@@ -32,37 +32,48 @@ body {
   box-sizing: border-box;
 }
 
+/*
+ * Sass nesting lets related selectors be grouped together under their
+ * parent selector instead of repeating the parent selector for each rule.
+ * The & parent selector keeps the BEM element names attached to .header,
+ * so &__logo-box compiles to .header__logo-box, &__logo compiles to
+ * .header__logo, and so on.
+ */
 .header {
+  /* Creates the large hero section that takes up 95% of the viewport height. */
   height: 95vh;
   /* Both gradient colors use 80% opacity:
-     rgba() expresses it as 0.8, while 8-digit hex uses CC as the alpha value. */
+     rgba() expresses it as 0.8, while 8-digit hex uses CC as the alpha value.
+     The gradient is layered over the hero background image. */
   background-image: linear-gradient(to right bottom, rgba(85, 197, 122, 0.8), rgba(40, 180, 133, 0.8)), url(../img/hero.jpg);
   background-size: cover; /* Scales the background image to cover the entire element, cropping if necessary. */
   background-position: top;
+  /* Allows absolutely positioned elements inside the header to use it as their positioning reference. */
   position: relative;
   clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); /* Clips the header into a polygon, creating the diagonal bottom edge. */
 }
-
 .header__logo-box {
   /* Position the logo relative to the nearest positioned ancestor. */
   position: absolute;
   top: 4rem;
   left: 4rem;
 }
-
 .header__logo {
   /* Setting only the height lets the width scale automatically to preserve the image's aspect ratio. */
   height: 3.5rem;
 }
-
 .header__text-box {
   /*
-  * Move the element's top-left corner toward the center of the header.
-  * translate() then shifts it back by 50% of its own width and height,
-  * which centers the element itself rather than its top-left corner.
-  *
-  * text-align: center centers the text  inside the button inside text-box alighing it to center of the text-box.
-  */
+   * Positions the text box near the center of the header.
+   * left: 50% places its left edge at the horizontal center,
+   * while top: 40% places its top edge at 40% of the header's height.
+   *
+   * translate() then shifts the element back by 50% of its own
+   * width and height, centering the element itself rather than
+   * its top-left corner.
+   *
+   * text-align: center centers the content inside the text box.
+   */
   position: absolute;
   top: 40%;
   left: 50%;
@@ -77,14 +88,13 @@ body {
   /* used to fix stuttering text during end of animation*/
   backface-visibility: hidden;
   margin-bottom: 6rem;
+  /* Styles the main heading span: "Outdoors". */
 }
-
-/* Styles the main heading span: "Outdoors". */
 .heading-primary--main {
   /*
-   * These are span elements by default. display: block makes each span
-   * take its own line instead of remaining inline with the other text.
-   */
+  * These are span elements by default. display: block makes each span
+  * take its own line instead of remaining inline with the other text.
+  */
   display: block;
   font-size: 6rem;
   font-weight: 400;
@@ -102,8 +112,9 @@ body {
   Waits 3 seconds before starting the animation.
   animation-delay: 3s;*/
 }
-
-/* Styles the subheading span: "is where life happens". */
+.heading-primary {
+  /* Styles the subheading span: "is where life happens". */
+}
 .heading-primary--sub {
   /* Keeps the subtitle on its own line beneath the main heading. */
   display: block;
@@ -111,9 +122,9 @@ body {
   font-weight: 700;
   letter-spacing: 1.75rem; /* 17.4 pixels converts roughly to 1.75rem */
   /* Shorthand for:
-     animation-name: moveInRight;
-     animation-duration: 1s;
-     animation-timing-function: ease-out;
+  animation-name: moveInRight;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
   */
   animation: moveInRight 1s ease-out;
 }
@@ -164,9 +175,10 @@ body {
     transform: translate(0);
   }
 }
-/* Styles the button in both its normal link and previously visited states. */
-.btn:link,
-.btn:visited {
+.btn {
+  /* Styles the button in both its normal link and previously visited states. */
+}
+.btn:link, .btn:visited {
   text-transform: uppercase;
   text-decoration: none;
   padding: 1.5rem 4rem;
@@ -181,32 +193,42 @@ body {
   position: relative;
   font-size: 1.6rem;
 }
-
-/* Moves the button slightly upward when the mouse is over it. */
+.btn {
+  /* Moves the button slightly upward when the mouse is over it. */
+}
 .btn:hover {
   transform: translateY(-3px);
   /*
-   * Adds a shadow with no horizontal x offset, 10px downward y offset,
-   * 20px blur, and black at 20% opacity.
-   * #0003 is shorthand for #00000033.
-   * With 000 being hex for black and 3 is the same as 20% opacity
-   */
+  * Adds a shadow with no horizontal (x) offset, a 1rem vertical (y)
+  * offset, a 2rem blur, and $color-primary-dark at 20% opacity.
+  */
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
 }
-
-/* Moves the button closer to its original position when clicked, creating a pressed effect. */
+.btn:hover::after {
+  /* 1.4 x and 1.6 so x value being scaled by 40% and y value being scaled by 60% */
+  transform: scaleX(1.4) scaleY(1.6);
+  /* Fades the pseudo-element out as it expands. */
+  opacity: 0;
+}
+.btn {
+  /* Moves the button closer to its original position when clicked, creating a pressed effect. */
+}
 .btn:active {
   transform: translateY(-1px);
   /* Uses a smaller shadow to reinforce the pressed-down effect. */
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2); /*value black and 3 opacity is equal to .2 rgba value)*/
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
-
-/* Provides the color styling for the white version of the button. */
+.btn {
+  /* Provides the color styling for the white version of the button. */
+}
 .btn--white {
   background-color: #fff;
   color: #777;
 }
-
+.btn--white::after {
+  /* Gives the pseudo-element the same white background as the white button. */
+  background-color: #fff;
+}
 .btn::after {
   /* Required for the ::after pseudo-element to be created, but no visible content is needed. */
   content: "";
@@ -217,9 +239,9 @@ body {
   /* Matches the rounded shape of the actual button. */
   border-radius: 10rem;
   /*
-   * Positions the pseudo-element directly over the button.
-   * The button is position: relative, so it becomes the positioning reference.
-   */
+  * Positions the pseudo-element directly over the button.
+  * The button is position: relative, so it becomes the positioning reference.
+  */
   position: absolute;
   top: 0;
   left: 0;
@@ -228,24 +250,11 @@ body {
   /* Smoothly animates the scaling and opacity changes applied on hover. */
   transition: all 0.4s;
 }
-
-.btn--white::after {
-  /* Gives the pseudo-element the same white background as the white button. */
-  background-color: #fff;
-}
-
-.btn:hover::after {
-  /* 1.4 x and 1.6 so x value being scaled by 40% and y value being scaled by 60% */
-  transform: scaleX(1.4) scaleY(1.6);
-  /* Fades the pseudo-element out as it expands. */
-  opacity: 0;
-}
-
 .btn--animated {
   /*
-   * animation shorthand order:
-   * name duration timing-function delay
-   */
+  * animation shorthand order:
+  * name duration timing-function delay
+  */
   animation: moveInButton 0.5s ease-out 0.75s; /* .25s felt snappier; keeping course value for now */
   /* Applies the animation's starting state during the .75s delay before it begins. */
   animation-fill-mode: backwards;
