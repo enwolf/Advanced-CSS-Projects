@@ -1015,3 +1015,29 @@ The corresponding selectors in `style.css` were updated so the existing layout, 
 A short BEM reference was also added to `index.html` to make the naming pattern easier to recognize while working in the project.
 
 > **Project note:** This was primarily a naming/architecture refactor rather than a visual change. See the course-wide notes for the full BEM explanation and naming caveat.
+
+### Natours CSS → SCSS Refactor
+
+The original Natours stylesheet has been refactored into SCSS. `main.scss` is now the source stylesheet, with Sass compiling it into the CSS used by the browser.
+
+For example, the original CSS used separate selectors such as:
+
+```css
+.header__logo-box {
+    position: absolute;
+}
+```
+
+The SCSS now groups this under the parent selector:
+
+```scss
+.header {
+    &__logo-box {
+        position: absolute;
+    }
+}
+```
+
+Sass compiles this back into `.header__logo-box`, so the browser still receives normal CSS.
+
+The refactor reorganized the existing styles to use Sass features such as variables, nesting, and BEM-style selector construction while preserving the existing project styling. The original pre-Sass stylesheet is preserved as `style.css.old` for reference.
