@@ -1,0 +1,71 @@
+// Header layout.
+//
+// Contains the main hero header and its nested logo and text box elements.
+
+
+/*---------------- Hero Header ----------------
+          Main hero section and layout
+------------------------------------------------*/
+
+// Sass nesting lets related selectors be grouped together under their
+// parent selector instead of repeating the parent selector for each rule.
+// The & parent selector keeps the BEM element names attached to .header,
+// so &__logo-box compiles to .header__logo-box, &__logo compiles to
+// .header__logo, and so on.
+
+.header {
+
+    // Creates the large hero section that takes up 95% of the viewport height.
+    height: 95vh;
+
+    // Both gradient colors use 80% opacity:
+    // rgba() expresses it as 0.8, while 8-digit hex uses CC as the alpha value.
+    // The gradient is layered over the hero background image.
+    background-image: linear-gradient(
+        to right bottom,
+        rgba($color-primary-light, 0.8),
+        rgba($color-primary-dark, 0.8)),
+        url(../img/hero.jpg);
+
+    // Scales the background image to cover the entire element, cropping if necessary.
+    background-size: cover;
+    background-position: top;
+
+    // Allows absolutely positioned elements inside the header to use it as their positioning reference.
+    position: relative;
+
+    // Clips the header into a polygon, creating the diagonal bottom edge.
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+
+    &__logo-box {
+
+        // Position the logo relative to the nearest positioned ancestor.
+        position: absolute;
+        top: 4rem;
+        left: 4rem;
+    }
+
+    &__logo {
+
+        // Setting only the height lets the width scale automatically to preserve the image's aspect ratio.
+        height: 3.5rem;
+    }
+
+    &__text-box {
+
+        // Positions the text box near the center of the header.
+        // left: 50% places its left edge at the horizontal center,
+        // while top: 40% places its top edge at 40% of the header's height.
+        //
+        // translate() then shifts the element back by 50% of its own
+        // width and height, centering the element itself rather than
+        // its top-left corner.
+        //
+        // text-align: center centers the content inside the text box.
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+}

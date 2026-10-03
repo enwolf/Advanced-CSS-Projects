@@ -1,0 +1,74 @@
+// Typography styles.
+//
+// Contains the base body typography and primary hero heading styles.
+
+
+/*---------------- Base Typography ----------------
+        Establishes the site's default typography
+---------------------------------------------------*/
+
+body {
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    color: $color-grey-dark;
+    padding: 3rem;
+}
+
+
+/*---------------- Primary Hero Heading ----------------
+             Main heading and subheading styles
+---------------------------------------------------------*/
+
+// Styles the entire h1 heading container, including both the main and subheading spans.
+.heading-primary {
+
+    color: $color-white;
+    text-transform: uppercase;
+
+    // Used to fix stuttering text during the end of animation.
+    backface-visibility: hidden;
+    margin-bottom: 6rem;
+
+    // Styles the main heading span: "Outdoors".
+    &--main {
+
+        // These are span elements by default. display: block makes each span
+        // take its own line instead of remaining inline with the other text.
+        display: block;
+        font-size: 6rem;
+        font-weight: 400;
+        letter-spacing: 3.5rem;
+
+        // Applies the moveInLeft @keyframes animation to this element.
+        animation-name: moveInLeft;
+
+        // The animation takes 1 second to complete from 0% to 100%.
+        animation-duration: 1s;
+
+        // Starts relatively quickly and slows down as it reaches the end.
+        animation-timing-function: ease-out;
+
+        // Runs the animation multiple times instead of only once.
+        // animation-iteration-count: 3;
+
+        // Waits 3 seconds before starting the animation.
+        // animation-delay: 3s;
+    }
+
+    // Styles the subheading span: "is where life happens".
+    &--sub {
+
+        // Keeps the subtitle on its own line beneath the main heading.
+        display: block;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 1.75rem; // 17.4 pixels converts roughly to 1.75rem.
+
+        // Shorthand for:
+        // animation-name: moveInRight;
+        // animation-duration: 1s;
+        // animation-timing-function: ease-out;
+        animation: moveInRight 1s ease-out;
+    }
+}

@@ -1,0 +1,68 @@
+// Animation partial.
+//
+// Contains the keyframes used for page and component entrance animations.
+
+
+/*---------------- Entrance Animations ----------------
+          Keyframes for page entrance effects
+-------------------------------------------------------*/
+
+// Moves the element in from the left, slightly overshoots, then settles into place.
+@keyframes moveInLeft {
+
+    // Animation starting point: invisible and shifted 100px to the left.
+    0% {
+        opacity: 0;
+        transform: translateX(-10rem);
+    }
+
+    // Near the end, move slightly past the final position to create an overshoot effect.
+    80% {
+        transform: translateX(1rem);
+    }
+
+    // Finish fully visible and back at the element's original position.
+    100% {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+
+// Moves the element in from the right, slightly overshoots, then settles into place.
+@keyframes moveInRight {
+
+    // Animation starting point: invisible and shifted 100px to the right.
+    0% {
+        opacity: 0;
+        transform: translateX(10rem); // Converted from 100px to 10rem.
+    }
+
+    // Near the end, move slightly past the final position to create an overshoot effect.
+    80% {
+        transform: translateX(-1rem);
+    }
+
+    // Finish fully visible and back at the element's original position.
+    100% {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+
+// Moves the button upward into position while fading it in.
+@keyframes moveInButton {
+
+    // Animation starting point: invisible and shifted 30px downward.
+    0% {
+        opacity: 0;
+        transform: translateY(3rem);
+    }
+
+    // Finish fully visible and back at the element's original position.
+    100% {
+        opacity: 1;
+        transform: translate(0);
+    }
+}

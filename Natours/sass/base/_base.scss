@@ -1,0 +1,38 @@
+// Base styles.
+//
+// Contains the global reset, root font sizing, and box-sizing configuration.
+
+
+/*---------------- Global Reset ----------------
+        Removes default browser spacing
+------------------------------------------------*/
+
+*,
+*::after,
+*::before {
+    margin: 0;  // direct reset
+    padding: 0; // direct reset
+
+    // Gives every element the instruction to inherit its box-sizing value.
+    box-sizing: inherit; // inheritance instruction
+}
+
+/*---------------- Root Font Size ----------------
+        Establishes the base rem scale
+------------------------------------------------*/
+
+html {
+    //This defines what 1 rem is on our page via default browser value. 
+    //So 62.5% of the browser's default 16px = 10px, so 1rem is approximately 10px. 
+    
+    font-size: 62.5%;
+}
+
+/*---------------- Box-Sizing Model ----------------
+       Establishes border-box as the sizing model
+----------------------------------------------------*/
+
+body {
+    // Establishes border-box as the site's sizing model; descendants inherit it through the reset above.
+    box-sizing: border-box;
+}
