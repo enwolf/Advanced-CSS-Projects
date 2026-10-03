@@ -1169,3 +1169,107 @@ Rather than installing it globally, the project runs it through the `start` npm 
 ```
 
 This keeps the development tooling attached to the project instead of installing it system-wide.
+
+## Sass Architecture and Partials
+
+Sass allows a stylesheet to be divided into smaller files organized by responsibility rather than keeping everything in one large stylesheet.
+
+### Sass Partials
+
+A **partial** is a Sass file intended to be included as part of a larger stylesheet rather than compiled into its own CSS file.
+
+Partials use a leading underscore:
+
+```text
+_variables.scss
+_mixins.scss
+_functions.scss
+```
+
+### Importing Partials
+
+When importing a partial, Sass allows both the leading `_` and the `.scss` extension to be omitted:
+
+```scss
+@import "abstracts/variables";
+```
+
+This imports:
+
+```text
+abstracts/_variables.scss
+```
+
+### Main Sass Entry Point
+
+A project can use one main Sass file as the **entry point** for the stylesheet. This file imports the smaller partials, which Sass then combines when compiling the final CSS.
+
+```text
+Sass partials
+     ↓
+main.scss
+     ↓
+compiled style.css
+     ↓
+browser
+```
+
+This allows the Sass source to remain separated into smaller, more manageable files while the browser receives a single compiled CSS file.
+
+### Organizing Sass by Responsibility
+
+Sass files can be grouped into directories according to what they are responsible for. For example:
+
+```text
+sass/
+├── abstracts/
+│   ├── _functions.scss
+│   ├── _mixins.scss
+│   └── _variables.scss
+├── base/
+│   ├── _base.scss
+│   ├── _animations.scss
+│   ├── _typography.scss
+│   └── _utilities.scss
+├── components/
+├── layout/
+├── pages/
+└── main.scss
+```
+
+This keeps related Sass code together and makes the overall stylesheet architecture easier to understand and maintain.
+
+### `@import` vs Modern Sass
+
+The course uses Sass `@import` to combine partials:
+
+```scss
+@import "abstracts/variables";
+@import "base/base";
+@import "pages/home";
+```
+
+`@import` is an older Sass approach. Modern Sass uses `@use` and `@forward` for managing Sass modules and dependencies.
+
+The important architectural idea is:
+
+> **Break the Sass source into smaller files organized by responsibility, then use a main entry point to assemble the stylesheet that gets compiled for the browser.**
+
+### Sass Comment Styles
+
+Sass supports two comment styles with different compilation behavior:
+
+```scss
+// Sass-only comment
+/* Comment preserved in compiled CSS */
+```
+
+- `//` comments are removed when Sass compiles the file. Use these for source-code notes, explanations, learning notes, and other comments intended only for the Sass source.
+- `/* ... */` comments are preserved in the generated CSS. Use these only when a comment is intentionally meant to remain in the compiled stylesheet.
+
+**Mental model:**
+
+> `//` → for us and the Sass source  
+> `/* ... */` → for the generated CSS too
+
+For this project, most explanatory comments should use `//` so they do not clutter the compiled CSS.

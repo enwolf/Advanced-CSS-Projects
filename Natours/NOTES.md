@@ -1018,6 +1018,8 @@ A short BEM reference was also added to `index.html` to make the naming pattern 
 
 ### Natours CSS → SCSS Refactor
 
+Initial conversion from the original CSS stylesheet to Sass. `main.scss` was introduced as the source stylesheet, with the first Sass nesting and BEM-style selector conversions applied.
+
 The original Natours stylesheet has been refactored into SCSS. `main.scss` is now the source stylesheet, with Sass compiling it into the CSS used by the browser.
 
 For example, the original CSS used separate selectors such as:
@@ -1041,3 +1043,129 @@ The SCSS now groups this under the parent selector:
 Sass compiles this back into `.header__logo-box`, so the browser still receives normal CSS.
 
 The refactor reorganized the existing styles to use Sass features such as variables, nesting, and BEM-style selector construction while preserving the existing project styling. The original pre-Sass stylesheet is preserved as `style.css.old` for reference.
+
+### Natours CSS → SCSS Refactor — Complete
+
+The original Natours stylesheet has been fully refactored into SCSS. `main.scss` is now the single Sass entry point, importing the project's Sass partials and compiling them into the `css/style.css` stylesheet used by the browser.
+
+The original pre-Sass stylesheet is preserved as `style.css.old` for reference.
+
+#### Current Sass Structure
+
+```text
+sass/
+├── abstracts/
+│   ├── _functions.scss
+│   ├── _mixins.scss
+│   └── _variables.scss
+├── base/
+│   ├── _base.scss
+│   ├── _animations.scss
+│   ├── _typography.scss
+│   └── _utilities.scss
+├── components/
+│   └── _button.scss
+├── layout/
+│   └── _header.scss
+├── pages/
+│   └── _home.scss
+└── main.scss
+```
+
+`main.scss` acts as the stylesheet entry point and assembles the partials by importing them in a logical order. The actual styling is contained within the appropriate partial rather than in `main.scss`.
+
+For example:
+
+```scss
+// main.scss
+
+@import "components/button";
+@import "layout/header";
+```
+
+The button styles now live in `components/_button.scss`, while the hero header styles live in `layout/_header.scss`.
+
+#### Sass Features Used
+
+The refactor reorganized the existing CSS to use:
+
+- Sass variables for shared values such as project colors.
+- Sass nesting for related selectors.
+- The `&` parent selector for BEM-style selector construction.
+- Sass partials to separate styles by responsibility.
+- A main Sass entry point to assemble the partials into one stylesheet.
+
+The resulting CSS preserves the existing project styling while Sass handles the organization and compilation.
+
+#### Comment Convention
+
+Sass-only technical and learning comments use `//` comments. These are removed when Sass compiles the stylesheet.
+
+`/* ... */` comments are reserved for important section headers that should remain visible in the compiled CSS. This keeps the generated `style.css` navigable while avoiding unnecessary implementation comments in the browser stylesheet.
+
+Each Sass partial can also begin with a `//` file-level description explaining the responsibility of that partial.
+
+For example:
+
+```scss
+// Button component.
+//
+// Contains the button styles, states, variants, pseudo-elements and animation configuration.
+```
+
+This file-level documentation is Sass-only, while section headers such as the following remain in the compiled CSS:
+
+```scss
+/*---------------- Button Components ----------------
+       Button states, variants, and interactions
+-----------------------------------------------------*/
+```
+
+#### Compilation
+
+Sass compiles:
+
+```text
+sass/main.scss
+        ↓
+css/style.css
+```
+
+The compiler also generates `style.css.map`, allowing browser developer tools to map the compiled CSS back to the original SCSS source files.
+
+The compiled stylesheet retains the intentional section headers while Sass-only implementation comments are removed.
+
+#### Sass Import Approach
+
+The current course implementation uses Sass `@import` to assemble the partials:
+
+```scss
+@import "abstracts/functions";
+@import "abstracts/mixins";
+@import "abstracts/variables";
+
+@import "base/base";
+@import "base/typography";
+@import "base/animations";
+@import "base/utilities";
+
+@import "components/button";
+
+@import "layout/header";
+
+@import "pages/home";
+```
+
+Sass partial filenames use a leading underscore, but the underscore and `.scss` extension can be omitted when importing them. For example:
+
+```text
+_variables.scss
+```
+
+is imported as:
+
+```scss
+@import "abstracts/variables";
+```
+
+Dart Sass currently reports deprecation warnings for `@import`. This is expected with the course's current approach and can be revisited when modern Sass module syntax using `@use` and `@forward` is covered.
