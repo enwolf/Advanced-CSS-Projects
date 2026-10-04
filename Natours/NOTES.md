@@ -1169,3 +1169,187 @@ is imported as:
 ```
 
 Dart Sass currently reports deprecation warnings for `@import`. This is expected with the course's current approach and can be revisited when modern Sass module syntax using `@use` and `@forward` is covered.
+
+### Natours Float Grid Layout
+
+The Natours project now includes a custom float-based grid system built during the course's layout lesson.
+
+The grid is implemented in a new layout partial:
+
+```text
+sass/
+├── abstracts/
+│   ├── _functions.scss
+│   ├── _mixins.scss
+│   └── _variables.scss
+├── base/
+│   ├── _base.scss
+│   ├── _animations.scss
+│   ├── _typography.scss
+│   └── _utilities.scss
+├── components/
+│   └── _button.scss
+├── layout/
+│   ├── _grid.scss
+│   └── _header.scss
+├── pages/
+│   └── _home.scss
+└── main.scss
+```
+
+`_grid.scss` is now responsible for the Natours row and column layout system, while `main.scss` continues to act as the single Sass entry point that assembles the project partials.
+
+The grid also introduced shared layout values in `_variables.scss`:
+
+```scss
+$grid-width: 114rem;
+$gutter-vertical: 8rem;
+$gutter-horizontal: 6rem;
+```
+
+These values keep the row width and gutter measurements separate from the grid implementation itself so they can be reused and adjusted from the project's variables partial.
+
+`main.scss` was updated to include the new grid partial:
+
+```scss
+@import "layout/grid";
+```
+
+The grid uses:
+
+- a maximum row width
+- automatic horizontal margins to center rows
+- vertical and horizontal gutters
+- floated columns
+- a clearfix to make rows contain their floated children
+- `:not(:last-child)` to avoid adding an unnecessary gutter after the final row or column
+- the attribute selector `[class^="col-"]` to apply shared behavior to all grid column classes
+- `calc()` to combine percentages and fixed gutter measurements
+- Sass variables inside the calculations
+
+The column classes created during the lesson include:
+
+```text
+col-1-of-2
+
+col-1-of-3
+col-2-of-3
+
+col-1-of-4
+col-2-of-4
+col-3-of-4
+```
+
+The basic width calculation is:
+
+```text
+single column width
+=
+(full row width - all gutters in the row)
+/
+number of columns
+```
+
+For example, a four-column row contains three gutters:
+
+```scss
+.col-1-of-4 {
+    width: calc((100% - 3 * #{$gutter-horizontal}) / 4);
+}
+```
+
+A column that spans multiple grid columns must also include the gutters that would normally sit between those columns.
+
+For example:
+
+```text
+2-of-4
+=
+2 single-column widths
++
+1 internal gutter
+```
+
+```scss
+.col-2-of-4 {
+    width: calc(
+        2 * ((100% - 3 * #{$gutter-horizontal}) / 4)
+        + #{$gutter-horizontal}
+    );
+}
+```
+
+Similarly:
+
+```text
+3-of-4
+=
+3 single-column widths
++
+2 internal gutters
+```
+
+```scss
+.col-3-of-4 {
+    width: calc(
+        3 * ((100% - 3 * #{$gutter-horizontal}) / 4)
+        + 2 * #{$gutter-horizontal}
+    );
+}
+```
+
+A useful general mental model is:
+
+```text
+multi-column span
+=
+number of single-column widths
++
+gutters contained between those columns
+```
+
+The shared column behavior is applied using:
+
+```scss
+[class^="col-"] {
+    float: left;
+}
+```
+
+`^=` means **starts with**, so this selects elements whose `class` attribute begins with `col-`.
+
+The row uses the project's `clearfix` mixin so its floated children are properly contained:
+
+```scss
+.row {
+    @include clearfix;
+}
+```
+
+The clearfix itself is defined in `_mixins.scss`, keeping the reusable float-containment behavior separate from the grid implementation.
+
+Floats change how elements participate in normal flow. The floated columns still have their own boxes and dimensions, but without clearfix the parent row would not normally account for their height in the same way as normal-flow children.
+
+The lesson also added temporary grid-test markup to `index.html` containing examples of the different column combinations.
+
+At the end of the lesson, the entire grid-test section was commented out to match the course's final state while preserving the markup for reference.
+
+```html
+<!--
+    Float grid test markup.
+
+    <section class="grid-test">
+        ...
+    </section>
+-->
+```
+
+HTML comments cannot be nested, so the individual comments that originally labelled each test row were removed before wrapping the complete test section in one outer comment block.
+
+To display the grid test again, remove the outer `<!-- ... -->` wrapper.
+
+The Sass source was then cleaned up by replacing the temporary stream-of-consciousness learning comments with permanent documentation explaining the actual grid behavior and calculations.
+
+`style.css` and `style.css.map` were regenerated from the completed Sass source.
+
+> **Project note:** This grid is intentionally built with floats because that is the layout technique being taught in this part of the course. Float-based page layout is now considered a legacy approach; later course projects use Flexbox and CSS Grid for modern layout.

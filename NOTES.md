@@ -1273,3 +1273,238 @@ Sass supports two comment styles with different compilation behavior:
 > `/* ... */` → for the generated CSS too
 
 For this project, most explanatory comments should use `//` so they do not clutter the compiled CSS.
+
+## Float Layout Mechanics and Grid Math
+
+Float-based layout is an older approach to building page and component layouts. It is useful to understand because it appears in legacy CSS, even though modern layouts would usually use **Flexbox** or **CSS Grid** instead.
+
+A floated element still uses the normal CSS box model, but its participation in normal document flow changes.
+
+When child elements are floated, they do not contribute to the parent's height through normal flow in the usual way. This can cause the parent to appear collapsed.
+
+A traditional solution is the **clearfix** pattern, which adds a cleared pseudo-element after the floated children so the parent contains the float layout correctly.
+
+### Grid Gutters and Column Widths
+
+For this style of equal-width grid, where one gutter sits between each adjacent pair of columns:
+
+```text
+number of gutters = number of columns - 1
+```
+
+For example:
+
+```text
+2 columns → 1 gutter
+3 columns → 2 gutters
+4 columns → 3 gutters
+```
+
+A single equal-width column can therefore be calculated as:
+
+```text
+(full row width - total gutter width) / number of columns
+```
+
+For a three-column layout:
+
+```text
+100% row width
+- 2 gutters
+÷ 3
+=
+width of one column
+```
+
+CSS `calc()` is useful here because it can combine relative values such as percentages with fixed or relative length values such as `rem`.
+
+```css
+calc((100% - 6rem) / 2)
+```
+
+The same idea can be expressed with Sass variables:
+
+```scss
+calc((100% - #{$gutter-horizontal}) / 2)
+```
+
+### Columns Spanning Multiple Grid Units
+
+A column that spans several grid units must include both:
+
+```text
+the single-column widths being spanned
++
+the gutters contained inside that span
+```
+
+For example:
+
+```text
+2-of-3
+=
+2 single-column widths
++
+1 internal gutter
+```
+
+```text
+3-of-4
+=
+3 single-column widths
++
+2 internal gutters
+```
+
+General mental model:
+
+```text
+multi-column span
+=
+number of single-column widths
++
+gutters contained between those columns
+```
+
+This is why a wider column cannot simply multiply the single-column width. The gutters that would normally separate those grid units must also be included in the final width.
+
+### Useful Selectors from the Float Grid
+
+#### `:not()`
+
+The `:not()` pseudo-class excludes elements that match another selector.
+
+For example:
+
+```css
+.row:not(:last-child)
+```
+
+selects `.row` elements that are **not** the last child of their parent.
+
+This is useful for applying spacing between rows without adding unnecessary spacing after the final one.
+
+The same pattern can be used for columns:
+
+```scss
+&:not(:last-child) {
+    margin-right: $gutter-horizontal;
+}
+```
+
+This adds a horizontal gutter after each column except the final child.
+
+#### Attribute Selectors
+
+Attribute selectors can target elements based on the value of one of their HTML attributes.
+
+For example:
+
+```css
+[class^="col-"]
+```
+
+targets elements whose `class` attribute begins with:
+
+```text
+col-
+```
+
+This works well with a consistent grid naming convention such as:
+
+```text
+col-1-of-2
+col-1-of-3
+col-2-of-3
+col-1-of-4
+col-2-of-4
+col-3-of-4
+```
+
+The `^=` operator means:
+
+```text
+starts with
+```
+
+Another related operator is:
+
+```text
+$=
+```
+
+which means:
+
+```text
+ends with
+```
+
+Using an attribute selector allows shared grid-column behavior to be defined once instead of repeating it for every individual column class.
+
+### Sass Interpolation Inside `calc()`
+
+Sass interpolation can be used to insert a Sass value into a CSS expression:
+
+```scss
+#{$gutter-horizontal}
+```
+
+For example:
+
+```scss
+calc((100% - 2 * #{$gutter-horizontal}) / 3)
+```
+
+The interpolation syntax:
+
+```scss
+#{}
+```
+
+has one job here:
+
+> **Insert the Sass value into the generated CSS expression.**
+
+It is **not** mathematical grouping.
+
+The parentheses are what group the mathematical expression:
+
+```scss
+(
+    (100% - 2 * #{$gutter-horizontal})
+    / 3
+)
+```
+
+Mental model:
+
+```text
+#{...}       → Sass interpolation / insert a value
+
+(...)        → mathematical grouping
+```
+
+> **Modern Sass note:** The interpolation used here reflects the older Sass style taught by the course. Modern Dart Sass can generally use Sass variables directly inside calculations without `#{}` interpolation. The interpolation syntax is still useful to understand because it appears frequently in older Sass code.
+
+### Modern CSS Note
+
+Floats are still valid CSS and remain useful for their original purpose, such as allowing text to flow around content.
+
+Using floats to build entire page or component layouts is now largely a **legacy layout technique**.
+
+Modern layout would usually use:
+
+```text
+Flexbox
+or
+CSS Grid
+```
+
+The float-based grid remains useful to understand because it demonstrates:
+
+- how floats affect normal flow
+- why clearfix exists
+- how gutters affect layout math
+- how multi-column spans are calculated
+- how `calc()` can combine different CSS units
+- how pseudo-classes and attribute selectors can reduce repeated CSS
