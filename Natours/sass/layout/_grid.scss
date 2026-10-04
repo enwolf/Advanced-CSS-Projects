@@ -1,77 +1,89 @@
+// Float grid layout.
+//
+// Contains the custom float-based grid system, including row sizing,
+// gutters, shared column behavior, clearfix handling, and column width calculations.
+
+/*---------------- Float Grid Layout ----------------
+       Custom row and column system using floats
+-----------------------------------------------------*/
+
 .row {
-    max-width: $grid-width; // he made a point about this being max-width and not just width due to I think responsive design reasons
-                            // If we have enough width then we will fill it, if there is not enough width and the view port can not fill that amount then it will fill up to the max I think
-                            // if that makes sense
+    // Uses the available width up to $grid-width.
+    // If the containing space is narrower, the row shrinks to fit instead of forcing a fixed width.
+    max-width: $grid-width;
+
     background-color: #eee;
-    margin: 0 auto;         //used to center block element inside another block element, lets us senter our gride/rows
-                            // it works because the browser automaticly ifgures out the left and right margins, so auto handles left and right via the browser and the element will be centered.
-     
-    
-    &:not(:last-child)   //.row:not() same thing just using the & to sub in for .row now we could also do row.:lastchild to target the last row but instead were doing everyting but that. basicly everything but the last child
-    {
+
+    // Centers the row horizontally when its max-width leaves extra space on either side.
+    // The browser automatically distributes the remaining space between the left and right margins.
+    margin: 0 auto;
+
+    // Adds vertical spacing between rows while leaving the last child without an extra bottom gutter.
+    // & represents .row, producing .row:not(:last-child).
+    &:not(:last-child) {
         margin-bottom: $gutter-vertical;
     }
 
+    // Makes the row contain its floated column children so they contribute to the row's height.
     @include clearfix;
 
-    //^ reads as start from the beggining? So it looks like were targeting any class that starts with "col-" which should hit all of our rows 
-    //as they follow a strick naming convention of col-1-of-3 or col-1-of-4 or col-1-of-2 ect. where all class atriubuts start with "col-".
-    //the key thing here is the ^ symbole to match begin with. you can also use the $ symbol to say ends with as well there were a few other optinos also.
-    //lots of great way to get at specfic selectors it would seem, you could also say target links for instance. 
-    [class^="col-"] {   
-
+    // Targets elements whose class attribute begins with "col-".
+    // The grid follows a consistent naming convention such as col-1-of-2 and col-2-of-3,
+    // allowing shared column behavior to be defined once instead of repeated for every column class.
+    [class^="col-"] {
         background-color: orangered;
-        float: left; // introducing our floats here, not exactly sure how this is working yet.
-             // I think one effect is that the floated children no longer contribute
-             // normally to the row's height, which is why clearfix is needed.
-        
-        &:not(:last-child){
-            margin-right: $gutter-horizontal; //same idea as with the row above, we are putting margin right on everything that isn't the last child, so that way we can use margin right to get our gutters setup on our child elements I think is how to say that.
 
-        
+        // Floats columns to the left so multiple columns can sit beside one another in the same row.
+        float: left;
+
+        // Adds the horizontal gutter after every column except the last child in the row.
+        &:not(:last-child) {
+            margin-right: $gutter-horizontal;
         }
-
     }
-    
+
+    // Two equal columns require one gutter.
+    // Subtract the gutter from the full row width, then divide the remaining width by two.
     .col-1-of-2 {
-        width: calc( (100% - #{$gutter-horizontal}) / 2);  //get (100% of the width - gutter-horizontal) for sass variables we need to wrap the variable name with #{} to call it, then divied the value of that by 2 to get our column value
-
+        width: calc((100% - #{$gutter-horizontal}) / 2);
     }
 
+    // Three equal columns require two gutters.
+    // Subtract both gutters, then divide the remaining width by three.
     .col-1-of-3 {
-
-        width: calc( (100% - 2 * #{$gutter-horizontal}) / 3); //ok math changes now and I am seeing a pattern so now its 100% of the width minus 2 gutters and then divied by 3 to get the 2 gutters again but ignore the last child        
-        
+        width: calc((100% - 2 * #{$gutter-horizontal}) / 3);
     }
 
-    .col-2-of-3 
-    {
-        width: calc( 2 * ((100% - 2 * #{$gutter-horizontal}) / 3) + #{$gutter-horizontal} ); //get the length of the single collum and its gutter and mulitple it by 2  then add the gutter width to make the col fill two rows of our gird I was not right here about the math
-
-
+    // Spans two of the three columns.
+    // Two single-column widths are combined with the one gutter that sits between them.
+    .col-2-of-3 {
+        width: calc(
+            2 * ((100% - 2 * #{$gutter-horizontal}) / 3)
+            + #{$gutter-horizontal}
+        );
     }
 
+    // Four equal columns require three gutters.
+    // Subtract the three gutters, then divide the remaining width by four.
     .col-1-of-4 {
-
-        width: calc( (100% - 3 * #{$gutter-horizontal}) / 4); //ok now changed to handle the 1 of 4 row / col situation I think my math is right but we will see
-        
+        width: calc((100% - 3 * #{$gutter-horizontal}) / 4);
     }
 
-    
+    // Spans two of the four columns.
+    // Two single-column widths are combined with the one gutter between them.
     .col-2-of-4 {
-
-         width: calc( 2 * ((100% - 3 * #{$gutter-horizontal}) / 4) + #{$gutter-horizontal} ); //ok since we have the value of one 1/4 of the col width we can then use it to make sure that we can handle 2 of 4 colums so this is going to have remove the space of 3 gutters but then actually i'm lost now, this was going well.
-
+        width: calc(
+            2 * ((100% - 3 * #{$gutter-horizontal}) / 4)
+            + #{$gutter-horizontal}
+        );
     }
 
-    .col-3-of-4
-    {
-         width: calc( 3 * ((100% - 3 * #{$gutter-horizontal}) / 4) + 2* #{$gutter-horizontal} ); //was able to work this out due to the math above which I suddently can't recall exactly how its working now
-
-         //ok so for 2and 3 of 4 its getting 100% of the width then subrcting the value for 3 gutters. that is the same for both, then it devides that into 4 cols once we have that value we can then add the gutter value to it and now we have 1/4 plus gutters
-         // after that we then multiple that value by 2 or 3 for the amount of space being occupided by the col div, and then add on the value for the uggters needed, so for 2 of 4 we have 2 gutters so x2 and for 3 of 4 there is only one gutter and the area is 3 1/4s pulus 2 gutters to fill the space.
-         //I think thats close to correct for these two equations.
+    // Spans three of the four columns.
+    // Three single-column widths are combined with the two gutters between them.
+    .col-3-of-4 {
+        width: calc(
+            3 * ((100% - 3 * #{$gutter-horizontal}) / 4)
+            + 2 * #{$gutter-horizontal}
+        );
     }
-    
-    
 }
