@@ -1,0 +1,16 @@
+@mixin clearfix {
+    //clearfix works by appending a psudo elelment after the elment which will then clear the floated elements, 
+    //the pseudo element being usfull because it just needs the rule and not to actually display anything.
+    // very much similaro to the  gutter rule in terms of selecting the pseudo element
+
+    //& again standing in for .row
+    &::after { 
+
+        content: ""; //needs this rule or else the pseudo element to appear, wiht out this it will not appear on the page, but it does need the content tag to actullay be rendered I think
+        display: table; //this one i'm not sure about, is it to access the clear property or becauase to use clear we need to define the element as a table first?
+        clear: both; //this clears left and right so it will work for either float left and float right but were mostly using float left. 
+
+        
+
+    }
+}

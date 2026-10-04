@@ -23,7 +23,9 @@
 @import "components/button";
 
 // Layout styles that define the structure and positioning of page sections.
+@import "layout/grid";
 @import "layout/header";
 
 // Styles specific to individual pages.
 @import "pages/home";
+

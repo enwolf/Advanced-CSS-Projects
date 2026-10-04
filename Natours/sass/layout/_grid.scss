@@ -1,0 +1,59 @@
+.row {
+    max-width: $grid-width; // he made a point about this being max-width and not just width due to I think responsive design reasons
+                            // If we have enough width then we will fill it, if there is not enough width and the view port can not fill that amount then it will fill up to the max I think
+                            // if that makes sense
+    background-color: #eee;
+    margin: 0 auto;         //used to center block element inside another block element, lets us senter our gride/rows
+                            // it works because the browser automaticly ifgures out the left and right margins, so auto handles left and right via the browser and the element will be centered.
+     
+    
+    &:not(:last-child)   //.row:not() same thing just using the & to sub in for .row now we could also do row.:lastchild to target the last row but instead were doing everyting but that. basicly everything but the last child
+    {
+        margin-bottom: $gutter-vertical;
+    }
+
+    @include clearfix;
+
+    //^ reads as start from the beggining? So it looks like were targeting any class that starts with "col-" which should hit all of our rows 
+    //as they follow a strick naming convention of col-1-of-3 or col-1-of-4 or col-1-of-2 ect. where all class atriubuts start with "col-".
+    //the key thing here is the ^ symbole to match begin with. you can also use the $ symbol to say ends with as well there were a few other optinos also.
+    //lots of great way to get at specfic selectors it would seem, you could also say target links for instance. 
+    [class^="col-"] {   
+
+        background-color: orangered;
+        float: left; // introducing our floats here, not exactly sure how this is working yet.
+             // I think one effect is that the floated children no longer contribute
+             // normally to the row's height, which is why clearfix is needed.
+        
+        &:not(:last-child){
+            margin-right: $gutter-horizontal; //same idea as with the row above, we are putting margin right on everything that isn't the last child, so that way we can use margin right to get our gutters setup on our child elements I think is how to say that.
+
+        
+        }
+
+    }
+    
+    .col-1-of-2 {
+        width: calc( (100% - #{$gutter-horizontal}) / 2);  //get (100% of the width - gutter-horizontal) for sass variables we need to wrap the variable name with #{} to call it, then divied the value of that by 2 to get our column value
+        
+
+        //ALl of this is moved into the [class^="col-] rule.
+
+
+        //background-color: orangered;
+        //float: left; //inroducing our floats here, not exactly sure how this is working yet though.
+                     // one effect of this is any element that is floated gets an height of 0 which is fixed by using the clear fix 
+        
+        //&:not(:last-child){
+          //  margin-right: $gutter-horizontal; //same idea as with the row above, we are putting margin right on everything that isn't the last child, so that way we can use margin right to get our gutters setup on our child elements I think is how to say that.
+
+        
+        //}
+    }
+
+    .col-1-of-3 {
+
+        width: calc( (100% - 2 * #{$gutter-horizontal}) / 3); //ok math changes now and I am seeing a pattern so now its 100% of the width minus 2 gutters and then divied by 3 to get the 2 gutters again but ignore the last child        
+        
+    }
+}
