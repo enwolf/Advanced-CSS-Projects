@@ -1,6 +1,7 @@
 // Typography styles.
 //
-// Contains the base body typography and primary hero heading styles.
+// Contains the site's base typography, heading styles,
+// paragraph styles, and text-related interactions.
 
 
 /*---------------- Base Typography ----------------
@@ -49,6 +50,8 @@ body {
         // Starts relatively quickly and slows down as it reaches the end.
         animation-timing-function: ease-out;
 
+        // Course/reference examples showing additional animation controls.
+
         // Runs the animation multiple times instead of only once.
         // animation-iteration-count: 3;
 
@@ -63,7 +66,10 @@ body {
         display: block;
         font-size: 2rem;
         font-weight: 700;
-        letter-spacing: 1.75rem; // 17.4 pixels converts roughly to 1.75rem.
+
+        // Small letter spacing used by the course design.
+        // With the current 10px rem scale, 1.75rem equals 17.5px.
+        letter-spacing: 1.75rem;
 
         // Shorthand for:
         // animation-name: moveInRight;
@@ -71,4 +77,78 @@ body {
         // animation-timing-function: ease-out;
         animation: moveInRight 1s ease-out;
     }
+}
+
+
+/*---------------- Secondary Section Heading ----------------
+        Reusable gradient heading for page sections
+--------------------------------------------------------------*/
+
+.heading-secondary {
+    font-size: 3.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+
+    // Keeps the element only as wide as its text content,
+    // so the gradient does not stretch across the full container width.
+    display: inline-block;
+
+    // Creates a left-to-right gradient that will be painted behind the text.
+    background-image: linear-gradient(
+        to right,
+        $color-primary-light,
+        $color-primary-dark
+    );
+
+    // Clips the background to the shape of the text characters.
+    background-clip: text;
+
+    // Makes the actual text fill transparent so the clipped gradient shows through.
+    color: transparent;
+
+    // A small decorative value where using pixels is reasonable.
+    letter-spacing: 2px;
+
+    // Smoothly animates the transform and text-shadow changes applied on hover.
+    transition: all .25s;
+
+    &:hover {
+
+        // Applies multiple transforms together:
+        // vertical skew, horizontal skew, and a slight scale increase.
+        transform: skewY(2deg) skewX(15deg) scale(1.1);
+
+        // Adds depth behind the heading while it transforms.
+        text-shadow: .5rem 1rem 2rem rgba($color-black, .2);
+
+    }
+}
+
+
+/*---------------- Tertiary Heading ----------------
+        Reusable h3 styling for section content
+----------------------------------------------------*/
+
+.heading-tertiary{
+
+    font-size: $default-font-size;
+    font-weight: 700;
+    text-transform: uppercase;
+
+}
+
+
+/*---------------- Paragraph Typography ----------------
+       Body copy sizing and paragraph spacing
+--------------------------------------------------------*/
+
+.paragraph {
+    font-size: $default-font-size;
+
+    // Applies bottom spacing to every paragraph except the last one,
+    // avoiding unnecessary space after the final paragraph in a group.
+    &:not(:last-child) {
+        margin-bottom: 3rem;
+    }
+
 }

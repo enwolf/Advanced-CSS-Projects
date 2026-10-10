@@ -1,0 +1,22 @@
+.u-center-text {
+    text-align: center; //this works because the child block inside the div with this class is an inline-block so it is able to align via text align property/value.
+}
+
+//text rules for our paragraphs inside of second sections "exciting tours for adventurous people." allows us to setup 3 differnt lvls of margin gab on all but the last child,
+//however in this case of using the &:not(::lastchild")
+
+//Which I think works becase we have 2 h3 headers and only 2 paragraphs
+// so nonly the first one recives the margin small bottom of 1.5 rems.
+
+//<h3 class="heading-tertiary u-margin-bottom-small">You're gonig to fall in love with nature</h3>
+// <p class="paragraph">
+//  Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, adipisci dicta! Quaerat odit molestias quasi temporibus suscipit mollitia sapiente eius, magni ipsum minus, vitae quam cupiditate in ad eveniet neque.
+// </p>
+//<h3 class="heading-tertiary u-margin-bottom-small">Live adventures Like you n u-margin-bottom-2ever have beofre</h3>
+// <p class="paragraph">
+//      Ipsum dolor sit amet consectetur adipisicing elit. Id adipisci possimus doloribus quo tempora? Doloremque architecto ad sit iure. Non, a! Accusantium blanditiis id animi molestias minima fugiat enim dolor.
+// </p>
+
+.u-margin-bottom-small {margin-bottom: 1.5rem;}
+.u-margin-bottom-medium {margin-bottom: 4rem;}
+.u-margin-bottom-big {margin-bottom: 8rem;}

@@ -1,11 +1,20 @@
-// Button component.
+// Button components.
 //
-// Contains the button styles, states, variants, pseudo-elements and animation configuration.
+// Contains the button styles, states, variants, pseudo-elements,
+// and animation/interaction configuration.
 
 
 /*---------------- Button Components ----------------
        Button states, variants, and interactions
 -----------------------------------------------------*/
+
+/* 
+
+*/
+
+/* Standard Button
+   Full CTA button with variants, interaction states,
+   pseudo-element effects, and entrance animation. */
 
 .btn {
 
@@ -19,12 +28,13 @@
         display: inline-block;
         border-radius: 10rem;
 
-        // Smoothly animates property changes over .2 seconds.
-        // The transition is placed on the base :link/:visited rule so it is active
-        // when the button moves into and back out of the :hover and :active states.
+        // Animates changes to animatable properties over .2 seconds.
+        // Placing the transition on the base state means it applies both when
+        // entering :hover/:active and when returning to the normal state.
         transition: all .2s;
+
         position: relative;
-        font-size: 1.6rem;
+        font-size: $default-font-size;
     }
 
     // Moves the button slightly upward when the mouse is over it.
@@ -46,7 +56,8 @@
         }
     }
 
-    // Moves the button closer to its original position when clicked, creating a pressed effect.
+    // Moves the button closer to its original position when clicked,
+    // creating a pressed-down effect.
     &:active {
 
         transform: translateY(-1px);
@@ -63,17 +74,19 @@
 
         &::after {
 
-            // Gives the pseudo-element the same white background as the white button.
+            // Gives the pseudo-element the same white background as the button.
             background-color: $color-white;
         }
     }
 
     &::after {
 
-        // Required for the ::after pseudo-element to be created, but no visible content is needed.
+        // Required for the ::after pseudo-element to exist.
+        // No visible text/content is needed.
         content: "";
 
-        display: inline-block; // Matches button also being an inline-block.
+        // Matches the button's inline-block behavior.
+        display: inline-block;
 
         // Starts the pseudo-element at the same size as the button.
         height: 100%;
@@ -83,13 +96,13 @@
         border-radius: 10rem;
 
         // Positions the pseudo-element directly over the button.
-        // The button is position: relative, so it becomes the positioning reference.
+        // Because .btn is position: relative, it becomes the positioning reference.
         position: absolute;
         top: 0;
         left: 0;
 
         // Places the pseudo-element behind the actual button.
-        // Think of it like sending it backward behind the button in Publisher.
+        // Think of it like sending the layer backward behind the button in Publisher.
         z-index: -1;
 
         // Smoothly animates the scaling and opacity changes applied on hover.
@@ -102,7 +115,63 @@
         // name duration timing-function delay
         animation: moveInButton .5s ease-out .75s; // .25s felt snappier; keeping course value for now.
 
-        // Applies the animation's starting state during the .75s delay before it begins.
+        // Displays the animation's starting state during the .75s delay
+        // before the animation itself begins.
         animation-fill-mode: backwards;
+    }
+}
+
+
+/* Text Button
+   Inline link-style button with custom underline,
+   hover lift, shadow, and active state. */
+
+.btn-text {
+
+    &:link,
+    &:visited {
+
+        font-size: $default-font-size;
+        color: $color-primary;
+        display: inline-block;
+
+        // Removes the browser's normal underline so the link can use
+        // a custom border-bottom instead.
+        text-decoration: none;
+
+        // Creates a custom underline using the primary color.
+        // Padding gives the text a small amount of space from the border.
+        // These small decorative measurements are fine in pixels because
+        // they do not need to scale like the larger layout measurements do.
+        border-bottom: 1px solid $color-primary;
+        padding: 3px;
+
+        // Animates changes to animatable properties over .2 seconds.
+        // Because the transition is declared on the base state, it works
+        // both when entering and when leaving :hover and :active.
+        //
+        // Here that includes changes such as background-color, color,
+        // box-shadow, and transform.
+        transition: all .2s;
+    }
+
+    &:hover {
+
+        // Reverses the visual treatment on hover:
+        // primary-colored background with white text.
+        background-color: $color-primary;
+        color: $color-white;
+
+        // Adds depth while the link moves slightly upward.
+        box-shadow: 0 1rem 2rem rgba($color-black, .15);
+        transform: translateY(-2px);
+    }
+
+    &:active {
+
+        // Reduces the shadow and returns the link to its original vertical
+        // position to create a pressed-down effect.
+        box-shadow: 0 .5rem 1rem rgba($color-black, .15);
+        transform: translateY(0);
     }
 }

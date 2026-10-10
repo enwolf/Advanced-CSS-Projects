@@ -1,22 +1,26 @@
-// COLORS:
-//
-// Light green: #7ed56f
-// Medium green: #55c57a
-// Dark green: #28b485
+// ---------------- Colors ----------------
+// Brand and neutral project colors
 
-// Primary brand color and its lighter and darker variations.
-$color-primary: #7ed56f;
-$color-primary-light: #55c57a;
+$color-primary: #55c57a;
+$color-primary-light: #7ed56f;
 $color-primary-dark: #28b485;
 
-// Neutral colors used throughout the project.
+$color-grey-light-1: #f7f7f7;
+
 $color-grey-dark: #777;
 $color-white: #fff;
 $color-black: #000;
 
-//GRID Variables
+
+// ---------------- Font Sizes ----------------
+// Reusable typography measurements
+
+$default-font-size: 1.6rem;
+
+
+// ---------------- Grid Variables ----------------
+// Custom float-grid dimensions and gutters
+
 $grid-width: 114rem;
-$gutter-vertical: 8rem; //80px as rem
-$gutter-horizontal: 6rem; //60px as rem
-
-
+$gutter-vertical: 8rem;
+$gutter-horizontal: 6rem;

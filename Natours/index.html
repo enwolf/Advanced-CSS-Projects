@@ -16,8 +16,9 @@
         
         <title>Natours | Exciting tours for adventurous people</title>
     </head>
+
     <body>
-        <!-- Hero/header section containing the logo and primary page heading. -->
+        <!-- Hero/header section containing the logo, primary heading, and call-to-action button. -->
         <!--
             BEM naming:
             block              = standalone component, e.g. header, heading-primary, btn
@@ -31,27 +32,80 @@
                 <img src="img/logo-white.png" alt="Logo" class="header__logo">
             </div>
 
-            <!-- Wraps and groups the heading text and button so they can be positioned and centered together. -->
+            <!-- Groups the heading and button so they can be positioned and centered together. -->
             <div class="header__text-box">
                 <h1 class="heading-primary">
-                    <!-- Spans allow each part of the same h1 to be styled separately. -->
+                    <!-- Spans allow each part of the same h1 to be styled independently. -->
                     <span class="heading-primary--main">Outdoors</span>
-                    <span class="heading-primary--sub">is where life happens</span>                
+                    <span class="heading-primary--sub">is where life happens</span>
                 </h1>
-                <!-- This element uses two classes space-separated: btn for shared button styles and btn-white for white button styles. -->
-                <!-- btn provides the base button styles; btn--white and btn--animated are BEM modifiers. -->
+
+                <!--
+                    The button uses a base BEM block plus two modifiers:
+                    btn = shared button styles
+                    btn--white = white button variation
+                    btn--animated = entrance animation variation
+                -->
                 <a href="#" class="btn btn--white btn--animated">Discover our tours</a>
             </div>
         </header>
+
+        <main>
+            <section class="section-about">
+
+                <!--
+                    Utility classes handle small, reusable layout adjustments:
+                    u-center-text centers the heading and
+                    u-margin-bottom-big adds spacing below it.
+                -->
+                <div class="u-center-text u-margin-bottom-big">
+                    <h2 class="heading-secondary">
+                        Exciting tours for adventurous people
+                    </h2>
+                </div>
+
+                <!--
+                    Two-column About section using the custom float grid.
+                    The left column contains text content; the right column
+                    will contain the image composition built in the next lesson.
+                -->
+                <div class="row">
+                    <div class="col-1-of-2">
+
+                        <h3 class="heading-tertiary u-margin-bottom-small">
+                            You're going to fall in love with nature
+                        </h3>
+
+                        <p class="paragraph">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, adipisci dicta! Quaerat odit molestias quasi temporibus suscipit mollitia sapiente eius, magni ipsum minus, vitae quam cupiditate in ad eveniet neque.
+                        </p>
+
+                        <h3 class="heading-tertiary u-margin-bottom-small">
+                            Live adventures like you never have before
+                        </h3>
+
+                        <p class="paragraph">
+                            Ipsum dolor sit amet consectetur adipisicing elit. Id adipisci possimus doloribus quo tempora? Doloremque architecto ad sit iure.
+                        </p>
+
+                        <!-- &rarr; is the HTML character entity for a right arrow. -->
+                        <a href="#" class="btn-text">Learn more &rarr;</a>
+                    </div>
+
+                    <div class="col-1-of-2">
+                        Image composition
+                    </div>
+                </div>
+            </section>
+        </main>
             
         <!--
         Float grid test markup.
         Used to verify the different column widths, gutters, and multi-column spans
         created by the custom float-based grid system.
 
+        Two equal columns: 1/2 + 1/2
         <section class="grid-test">
-
-            Two equal columns: 1/2 + 1/2
             <div class="row">
                 <div class="col-1-of-2">
                     Col 1 of 2
@@ -122,12 +176,7 @@
                     Col 3 of 4
                 </div>
             </div>
-
         </section>
-    -->
-    
-
-
-
+        -->
     </body>
 </html>

@@ -3,16 +3,19 @@
 // Contains the custom float-based grid system, including row sizing,
 // gutters, shared column behavior, clearfix handling, and column width calculations.
 
+
 /*---------------- Float Grid Layout ----------------
        Custom row and column system using floats
 -----------------------------------------------------*/
 
 .row {
+
+    // ---------------- Row Setup ----------------
+    // Width, centering, spacing, and clearfix
+
     // Uses the available width up to $grid-width.
     // If the containing space is narrower, the row shrinks to fit instead of forcing a fixed width.
     max-width: $grid-width;
-
-    background-color: #eee;
 
     // Centers the row horizontally when its max-width leaves extra space on either side.
     // The browser automatically distributes the remaining space between the left and right margins.
@@ -27,12 +30,15 @@
     // Makes the row contain its floated column children so they contribute to the row's height.
     @include clearfix;
 
+
+    // ---------------- Shared Column Behavior ----------------
+    // Float positioning and horizontal gutters
+
     // Targets elements whose class attribute begins with "col-".
     // The grid follows a consistent naming convention such as col-1-of-2 and col-2-of-3,
     // allowing shared column behavior to be defined once instead of repeated for every column class.
     [class^="col-"] {
-        background-color: orangered;
-
+        
         // Floats columns to the left so multiple columns can sit beside one another in the same row.
         float: left;
 
@@ -41,6 +47,10 @@
             margin-right: $gutter-horizontal;
         }
     }
+
+
+    // ---------------- Column Width Calculations ----------------
+    // Equal-width columns and multi-column spans
 
     // Two equal columns require one gutter.
     // Subtract the gutter from the full row width, then divide the remaining width by two.
