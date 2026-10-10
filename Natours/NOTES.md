@@ -1353,3 +1353,64 @@ The Sass source was then cleaned up by replacing the temporary stream-of-conscio
 `style.css` and `style.css.map` were regenerated from the completed Sass source.
 
 > **Project note:** This grid is intentionally built with floats because that is the layout technique being taught in this part of the course. Float-based page layout is now considered a legacy approach; later course projects use Flexbox and CSS Grid for modern layout.
+
+## About Section — Text Content and Styling
+*2026-10-10*
+
+Built out the text portion of the About section before moving on to the image composition.
+
+### Section Layout
+
+- Added the About section heading and a two-column layout using the existing custom float grid.
+- The left column now contains two tertiary headings, paragraph content, and a "Learn more" text link.
+- The right column is reserved for the image composition built in the next lesson.
+- `.section-about` uses:
+
+  - `$color-grey-light-1` for the background.
+  - `25rem 0` padding for the large vertical spacing.
+  - `margin-top: -20vh` to pull the section upward beneath the clipped hero header.
+
+- The `-20vh` overlap comes from the difference between the header's `95vh` height and the `75vh` bottom-right point used by its `clip-path`.
+
+### Typography
+
+Added several reusable typography styles:
+
+- `.heading-secondary`
+  - Uses a left-to-right green gradient.
+  - `background-clip: text` clips the gradient to the letter shapes.
+  - `color: transparent` reveals the clipped background through the text.
+  - `display: inline-block` keeps the gradient constrained to the width of the heading.
+  - Adds letter spacing and a hover effect using skew, scale, and `text-shadow`.
+
+- `.heading-tertiary`
+  - Uses `$default-font-size`.
+  - Bold and uppercase for smaller section headings.
+
+- `.paragraph`
+  - Uses `$default-font-size`.
+  - `:not(:last-child)` adds spacing between paragraphs without adding unnecessary space after the final paragraph.
+
+### Text Button
+
+Added the reusable `.btn-text` component for inline call-to-action links.
+
+- Removes the browser's normal underline and replaces it with a `border-bottom`.
+- Hover state changes to the primary green background with white text.
+- Adds a small upward movement and shadow on hover.
+- Active state returns the link to its normal vertical position with a reduced shadow.
+- `transition` is declared on the base state so the interaction animates both entering and leaving the hover/active states.
+
+### Utilities and Variables
+
+Added reusable utility classes for:
+
+- Centered text.
+- Small, medium, and large bottom margins.
+
+Added:
+
+- `$color-grey-light-1: #f7f7f7`
+- `$default-font-size: 1.6rem`
+
+Also cleaned up Sass comments so source-only organizational notes use `//`, while useful major section headings remain visible in the compiled CSS.
