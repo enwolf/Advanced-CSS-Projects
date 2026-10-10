@@ -1508,3 +1508,31 @@ The float-based grid remains useful to understand because it demonstrates:
 - how multi-column spans are calculated
 - how `calc()` can combine different CSS units
 - how pseudo-classes and attribute selectors can reduce repeated CSS
+
+## Git Commit Message Convention
+*2026-10-10*
+
+For substantial commits, use a concise subject line followed by a more detailed body describing the meaningful changes.
+
+- Keep the subject focused on the overall unit of work rather than listing individual files.
+
+- Use specific body bullets that explain what was actually added, changed, or cleaned up.
+
+- When the commit body is long enough that bullets wrap onto multiple lines, leave a blank line between bullet points to make the message easier to scan.
+
+- Shorter commits do not need the extra spacing or the same level of detail.
+
+- Prefer describing the feature or project milestone first, then mention supporting file-level changes where useful.
+
+Example:
+
+```text
+Complete About section text layout and supporting styles
+
+- Update index.html with the About section heading, two-column grid layout,
+  text content, and Learn more link
+
+- Add the supporting typography, text-button, utility, and section styles
+
+- Regenerate the compiled CSS and source map
+```
